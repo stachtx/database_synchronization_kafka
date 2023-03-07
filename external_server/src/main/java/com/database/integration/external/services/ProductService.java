@@ -14,31 +14,34 @@ import java.util.UUID;
 
 public interface ProductService {
 
-    @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
-    @PreAuthorize("hasAuthority('PRODUCT_LIST_READ')")
-    List<Product> getAllProducts();
+  @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
+  @PreAuthorize("hasAuthority('PRODUCT_LIST_READ')")
+  List<Product> getAllProducts();
 
-    @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
-    @PreAuthorize("hasAuthority('PRODUCT_LIST_FOR_DEPARTMENT_READ')")
-    List<Product> getAllProductsForDepartment(UUID departmentId);
+  @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
+  @PreAuthorize("hasAuthority('PRODUCT_LIST_FOR_DEPARTMENT_READ')")
+  List<Product> getAllProductsForDepartment(UUID departmentId);
 
-    @Transactional(propagation = Propagation.MANDATORY)
-    @PreAuthorize("hasAuthority('PRODUCT_CREATE')")
-    void createNewProduct(ProductDto productDto) throws DatabaseErrorException;
+  @Transactional(propagation = Propagation.MANDATORY)
+  @PreAuthorize("hasAuthority('PRODUCT_CREATE')")
+  void createNewProduct(ProductDto productDto) throws DatabaseErrorException;
 
-    @Transactional(propagation = Propagation.MANDATORY)
-    @PreAuthorize("hasAuthority('PRODUCT_UPDATE')")
-    void updateProduct(ProductDto product) throws EntityNotInDatabaseException, EntityOptimisticLockException, DatabaseErrorException;
+  @Transactional(propagation = Propagation.MANDATORY)
+  @PreAuthorize("hasAuthority('PRODUCT_UPDATE')")
+  void updateProduct(ProductDto product)
+      throws EntityNotInDatabaseException, EntityOptimisticLockException, DatabaseErrorException;
 
-    @Transactional(propagation = Propagation.MANDATORY)
-    @PreAuthorize("hasAuthority('PRODUCT_DELETE')")
-    void deleteProductById(UUID id) throws EntityNotInDatabaseException;
+  @Transactional(propagation = Propagation.MANDATORY)
+  @PreAuthorize("hasAuthority('PRODUCT_DELETE')")
+  void deleteProductById(UUID id) throws EntityNotInDatabaseException;
 
-    @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
-    @PreAuthorize("hasAuthority('PRODUCT_READ')")
-    Product getProduct(UUID id) throws EntityNotInDatabaseException;
+  @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
+  @PreAuthorize("hasAuthority('PRODUCT_READ')")
+  Product getProduct(UUID id) throws EntityNotInDatabaseException;
 
-    @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
-    @PreAuthorize("hasAuthority('PRODUCT_READ')")
-    Product getProductBySerialNumber(String serialNumber) throws EntityNotInDatabaseException;
+  @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
+  @PreAuthorize("hasAuthority('PRODUCT_READ')")
+  Product getProductBySerialNumber(String serialNumber) throws EntityNotInDatabaseException;
+
+  void mergeProduct(Product product);
 }

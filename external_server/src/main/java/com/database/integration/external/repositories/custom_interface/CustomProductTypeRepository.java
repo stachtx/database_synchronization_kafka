@@ -4,5 +4,7 @@ import com.database.integration.core.model.products.ProductType;
 
 public interface CustomProductTypeRepository {
 
-    void detach(ProductType entity);
+  void detach(ProductType entity);
+
+  void merge(ProductType productType);
 }

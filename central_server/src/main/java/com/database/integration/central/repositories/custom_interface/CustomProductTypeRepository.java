@@ -1,8 +1,10 @@
 package com.database.integration.central.repositories.custom_interface;
 
-import com.central.model.products.ProductType;
+import com.database.integration.core.model.products.ProductType;
 
 public interface CustomProductTypeRepository {
 
     void detach(ProductType entity);
+
+    void merge(ProductType entity);
 }

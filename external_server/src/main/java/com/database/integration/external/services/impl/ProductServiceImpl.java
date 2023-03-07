@@ -121,4 +121,9 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findBySerialNumber(serialNumber).orElseThrow(() -> new EntityNotInDatabaseException(EntityNotInDatabaseException.NO_OBJECT));
         return product.isDeleted() ? null : product;
     }
+
+    @Override
+    public void mergeProduct(Product product) {
+        productRepository.merge(product);
+    }
 }

@@ -31,4 +31,6 @@ public interface DepartmentService {
     @Transactional
     @PreAuthorize("hasAuthority('DEPARTMENT_DELETE')")
     void deleteDepartmentById(UUID id) throws EntityNotInDatabaseException;
+
+    void mergeDepartment(Department department);
 }

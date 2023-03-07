@@ -79,4 +79,9 @@ public class DepartmentServiceImpl implements DepartmentService {
         kafkaProducer.send(department);
     }
 
+    @Override
+    public void mergeDepartment(Department department) {
+        departmentRepository.merge(department);
+    }
+
 }

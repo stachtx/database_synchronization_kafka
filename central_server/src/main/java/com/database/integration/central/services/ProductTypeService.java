@@ -13,23 +13,26 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface ProductTypeService {
 
-    @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
-    @PreAuthorize("hasAuthority('PRODUCT_TYPE_READ')")
-    ProductType getProductTypeById(UUID id) throws EntityNotInDatabaseException;
+  @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
+  @PreAuthorize("hasAuthority('PRODUCT_TYPE_READ')")
+  ProductType getProductTypeById(UUID id) throws EntityNotInDatabaseException;
 
-    @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
-    @PreAuthorize("hasAuthority('PRODUCT_TYPE_LIST_READ')")
-    List<ProductType> getAllProductTypes();
+  @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
+  @PreAuthorize("hasAuthority('PRODUCT_TYPE_LIST_READ')")
+  List<ProductType> getAllProductTypes();
 
-    @Transactional(propagation = Propagation.MANDATORY)
-    @PreAuthorize("hasAuthority('PRODUCT_TYPE_CREATE')")
-    void createNewDeviceModel(ProductTypeDto productTypeDto) throws DatabaseErrorException;
+  @Transactional(propagation = Propagation.MANDATORY)
+  @PreAuthorize("hasAuthority('PRODUCT_TYPE_CREATE')")
+  void createNewDeviceModel(ProductTypeDto productTypeDto) throws DatabaseErrorException;
 
-    @Transactional(propagation = Propagation.MANDATORY)
-    @PreAuthorize("hasAuthority('PRODUCT_TYPE_UPDATE')")
-    void updateProductType(ProductTypeDto productTypeDto) throws EntityNotInDatabaseException, EntityOptimisticLockException, DatabaseErrorException;
+  @Transactional(propagation = Propagation.MANDATORY)
+  @PreAuthorize("hasAuthority('PRODUCT_TYPE_UPDATE')")
+  void updateProductType(ProductTypeDto productTypeDto)
+      throws EntityNotInDatabaseException, EntityOptimisticLockException, DatabaseErrorException;
 
-    @Transactional(propagation = Propagation.MANDATORY)
-    @PreAuthorize("hasAuthority('PRODUCT_TYPE_DELETE')")
-    void deleteProductTypeById(UUID id) throws EntityNotInDatabaseException;
+  @Transactional(propagation = Propagation.MANDATORY)
+  @PreAuthorize("hasAuthority('PRODUCT_TYPE_DELETE')")
+  void deleteProductTypeById(UUID id) throws EntityNotInDatabaseException;
+
+  void mergeProductType(ProductType productType);
 }

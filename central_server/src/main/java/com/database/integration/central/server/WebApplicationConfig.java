@@ -14,22 +14,24 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebApplicationConfig implements WebMvcConfigurer {
 
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/notFound").setViewName("forward:/ui/index.html");
-    }
+  private String notFoundUrlPath = "/notFound";
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**");
-    }
+  @Override
+  public void addViewControllers(ViewControllerRegistry registry) {
+    registry.addViewController(notFoundUrlPath).setViewName("forward:/ui/index.html");
+  }
 
-    @Bean
-    public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> containerCustomizer() {
-        return container -> {
-            container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND,
-                    "/notFound"));
-            container.addErrorPages(new ErrorPage(HttpStatus.LOOP_DETECTED, "/notFound"));
-        };
-    }
+  @Override
+  public void addCorsMappings(CorsRegistry registry) {
+    registry.addMapping("/**");
+  }
+
+  @Bean
+  public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> containerCustomizer() {
+    return container -> {
+      container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND,
+          "/notFound"));
+      container.addErrorPages(new ErrorPage(HttpStatus.LOOP_DETECTED, notFoundUrlPath));
+    };
+  }
 }

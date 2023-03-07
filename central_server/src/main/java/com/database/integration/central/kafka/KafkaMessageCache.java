@@ -12,7 +12,6 @@ public class KafkaMessageCache {
 
   private static final Deque<Object> cachedMessages = new ArrayDeque<>();
 
-
   public static Deque<Object> getCachedMessages() {
     return cachedMessages;
   }

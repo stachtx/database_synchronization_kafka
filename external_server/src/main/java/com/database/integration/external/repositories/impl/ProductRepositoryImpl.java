@@ -2,19 +2,26 @@ package com.database.integration.external.repositories.impl;
 
 import com.database.integration.core.model.products.Product;
 import com.database.integration.external.repositories.custom_interface.CustomProductRepository;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.hibernate.ReplicationMode;
+import org.hibernate.Session;
 
 
 public class ProductRepositoryImpl implements CustomProductRepository {
 
+  @PersistenceContext
+  private EntityManager entityManager;
 
-    @PersistenceContext
-    private EntityManager entityManager;
+  @Override
+  public void detach(Product entity) {
+    entityManager.detach(entity);
+  }
 
-    @Override
-    public void detach(Product entity) {
-        entityManager.detach(entity);
-    }
+  @Override
+  public void merge(Product product) {
+    Session session = (Session) entityManager.getDelegate();
+    detach(product);
+    session.replicate(product, ReplicationMode.LATEST_VERSION);
+  }
 }

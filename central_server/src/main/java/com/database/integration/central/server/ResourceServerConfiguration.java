@@ -13,7 +13,6 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     private static final String RESOURCE_ID = "resource-server-rest-api";
     private static final String SECURED_PATTERN = "/secured/**";
 
-
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
         resources.resourceId(RESOURCE_ID);

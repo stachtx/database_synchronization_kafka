@@ -1,11 +1,14 @@
 package com.database.integration.central.kafka.producer;
 
 
+import static java.text.MessageFormat.format;
+
 import com.database.integration.central.kafka.KafkaMessageCache;
 import com.database.integration.core.model.Department;
 import com.database.integration.core.model.products.Product;
 import com.database.integration.core.model.products.ProductType;
 import com.database.integration.core.model.users.User;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
+@Slf4j
 public class KafkaProducer {
 
   @Autowired
@@ -29,52 +33,47 @@ public class KafkaProducer {
   @Autowired
   private KafkaTemplate<String, Department> departmentKafkaTemplate;
 
-
-  private String unitTopicUser = "unit-topic-user";
-
-  private String unitTopicProduct = "unit-topic-product";
-
-  private String unitTopicProductType = "unit-topic-product-type";
-
-  private String unitTopicDepartment = "unit-topic-department";
+  private String externalTopicUser = "external-topic-user";
+  private String externalTopicProduct = "external-topic-product";
+  private String externalTopicProductType = "external-topic-product-type";
+  private String externalTopicDepartment = "external-topic-department";
 
   private static final Logger LOGGER = LoggerFactory.getLogger(KafkaProducer.class);
 
   @Async
   public void send(User user) {
-    handleResult(userTemplate.send(unitTopicUser, user), user);
+    handleResult(userTemplate.send(externalTopicUser, user), user);
   }
 
   @Async
   public void send(Product product) {
-    handleResult(productTemplate.send(unitTopicProduct, product), product);
+    handleResult(productTemplate.send(externalTopicProduct, product), product);
   }
 
   @Async
   public void send(ProductType productType) {
-    handleResult(productTypeKafkaTemplate.send(unitTopicProductType, productType), productType);
+    handleResult(productTypeKafkaTemplate.send(externalTopicProductType, productType), productType);
   }
 
   @Async
   public void send(Department department) {
-    handleResult(departmentKafkaTemplate.send(unitTopicDepartment, department), department);
+    handleResult(departmentKafkaTemplate.send(externalTopicDepartment, department), department);
   }
 
   private <T> void handleResult(ListenableFuture<SendResult<String, T>> future, T message) {
     future.addCallback(new ListenableFutureCallback<SendResult<String, T>>() {
       @Override
       public void onSuccess(SendResult<String, T> result) {
-        LOGGER.info("Sent message = [ "
-            + message.getClass().getSimpleName() + " : " + message.toString()
-            + " ] with offset=[ " + result.getRecordMetadata().offset() + " ]");
+        log.info(format("Sent message = [ {0} : {1} ] with offset=[ {2} ]",
+            message.getClass().getSimpleName(), message,
+            result.getRecordMetadata().offset()));
       }
 
       @Override
       public void onFailure(Throwable ex) {
         KafkaMessageCache.put(message);
-        LOGGER.warn("Unable to send message =[ "
-            + message.getClass().getSimpleName() + " : "
-            + message.toString() + " ] due to : " + ex.getMessage());
+        log.warn(format("Unable to send message =[ {0} : {1} ] due to : {2}",
+            message.getClass().getSimpleName(), message, ex.getMessage()));
       }
     });
   }

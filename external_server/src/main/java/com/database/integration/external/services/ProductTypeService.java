@@ -33,4 +33,6 @@ public interface ProductTypeService {
     @Transactional(propagation = Propagation.MANDATORY)
     @PreAuthorize("hasAuthority('PRODUCT_TYPE_DELETE')")
     void deleteProductTypeById(UUID id) throws EntityNotInDatabaseException;
+
+    void mergeProductType(ProductType productType);
 }

@@ -87,4 +87,9 @@ public class ProductTypeServiceImpl implements ProductTypeService {
         kafkaProducer.send(productType);
     }
 
+    @Override
+    public void mergeProductType(ProductType productType) {
+        productTypeRepository.merge(productType);
+    }
+
 }

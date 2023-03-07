@@ -19,10 +19,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/secured/account")
 @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = SystemBaseException.class)
 public class AccountController {
-
     @Autowired
     private AccountUpdateService accountUpdateService;
-
     @Autowired
     private AccountRegistrationService accountRegistrationService;
 

@@ -1,6 +1,7 @@
 package com.database.integration.core.exception;
 
 import org.springframework.http.HttpStatus;
+
 import org.springframework.messaging.support.ErrorMessage;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

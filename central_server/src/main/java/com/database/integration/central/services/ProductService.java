@@ -40,4 +40,6 @@ public interface ProductService {
     @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
     @PreAuthorize("hasAuthority('PRODUCT_READ')")
     Product getProductBySerialNumber(String serialNumber) throws EntityNotInDatabaseException;
+
+    void mergeProduct(Product product);
 }

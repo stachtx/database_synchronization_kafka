@@ -42,6 +42,5 @@ public interface UserService {
     @PreAuthorize("hasAuthority('PASSWORD_UPDATE')")
     void updatePassword(PasswordInfoDto passwordInfoDto, String username) throws EntityNotInDatabaseException, ServiceException;
 
-    @Transactional
     void mergeUser(User user);
 }

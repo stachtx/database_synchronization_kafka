@@ -1,9 +1,10 @@
 package com.database.integration.central.kafka.producer;
 
-import com.central.model.products.Product;
-import com.central.model.products.ProductType;
-import com.central.model.users.User;
-import com.central.model.Department;
+
+import com.database.integration.core.model.Department;
+import com.database.integration.core.model.products.Product;
+import com.database.integration.core.model.products.ProductType;
+import com.database.integration.core.model.users.User;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
