@@ -1,13 +1,13 @@
-# central-server
+# External server
 
-You need to download and install pgadmin4. Then create a PostgreSql database server in it
-host: localhost
-port: 5432
-username: postgres
+Download and install pgadmin4. Then create a PostgreSql database server in it
+- host: localhost
+- port: 5431
+- username: postgres
 
-In the newly created server, add a database named: central-database
+In the newly created server, add a database named: external-database
 
-We import the project into intelij and launch CentralServerApplication. We will start the tomcat server on port 8081.
+External server application is launched on port 8081.
 
 Link to swagger:
 http://localhost:8081/swagger-ui.html#!

@@ -37,7 +37,6 @@ public class ProductController {
         return productService.getProductBySerialNumber(serialNumber);
     }
 
-
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody

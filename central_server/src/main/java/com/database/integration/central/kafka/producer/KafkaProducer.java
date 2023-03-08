@@ -33,10 +33,10 @@ public class KafkaProducer {
   @Autowired
   private KafkaTemplate<String, Department> departmentKafkaTemplate;
 
-  private String externalTopicUser = "external-topic-user";
-  private String externalTopicProduct = "external-topic-product";
-  private String externalTopicProductType = "external-topic-product-type";
-  private String externalTopicDepartment = "external-topic-department";
+  private final String externalTopicUser = "external-topic-user";
+  private final String externalTopicProduct = "external-topic-product";
+  private final String externalTopicProductType = "external-topic-product-type";
+  private final String externalTopicDepartment = "external-topic-department";
 
   private static final Logger LOGGER = LoggerFactory.getLogger(KafkaProducer.class);
 

@@ -30,7 +30,6 @@ public class DepartmentController {
     Department get(@PathVariable UUID id) throws SystemBaseException {
         return departmentService.getDepartment(id);
     }
-
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
