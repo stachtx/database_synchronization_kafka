@@ -11,7 +11,7 @@ import com.database.integration.core.exception.ServiceException;
 import com.database.integration.core.model.users.User;
 import com.database.integration.core.model.users.UserRole;
 
-import com.google.common.collect.Lists;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllUsers() {
-        List<User> users = Lists.newArrayList(userRepository.findAll());
+        List<User> users = userRepository.findAll();
         return users.stream().filter(User::isEnabled).collect(Collectors.toList());
     }
 

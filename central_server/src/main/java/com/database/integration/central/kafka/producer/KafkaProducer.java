@@ -18,6 +18,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
+import java.util.concurrent.CompletableFuture;
+
 @Slf4j
 public class KafkaProducer {
 
@@ -60,20 +62,18 @@ public class KafkaProducer {
     handleResult(departmentKafkaTemplate.send(externalTopicDepartment, department), department);
   }
 
-  private <T> void handleResult(ListenableFuture<SendResult<String, T>> future, T message) {
-    future.addCallback(new ListenableFutureCallback<SendResult<String, T>>() {
-      @Override
-      public void onSuccess(SendResult<String, T> result) {
-        log.info(format("Sent message = [ {0} : {1} ] with offset=[ {2} ]",
-            message.getClass().getSimpleName(), message,
-            result.getRecordMetadata().offset()));
-      }
+  private <T> void handleResult(CompletableFuture<SendResult<String, T>> future, T message) {
 
-      @Override
-      public void onFailure(Throwable ex) {
+    future.whenComplete((metadata, exception) -> {
+      if (exception == null) {
+        log.info(format("Message [ {0} : {1} ] sent successfully to partition {2} with offset= [ {3} ]",
+                message.getClass().getSimpleName(), message,metadata.getRecordMetadata().partition(),
+                metadata.getRecordMetadata().offset()));
+
+      } else {
         KafkaMessageCache.put(message);
-        log.warn(format("Unable to send message =[ {0} : {1} ] due to : {2}",
-            message.getClass().getSimpleName(), message, ex.getMessage()));
+        log.warn(format("Failed to send message =[ {0} : {1} ] due to : {2}",
+                message.getClass().getSimpleName(), message, exception.getMessage()));
       }
     });
   }

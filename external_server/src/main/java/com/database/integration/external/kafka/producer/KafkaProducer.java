@@ -1,20 +1,23 @@
 package com.database.integration.external.kafka.producer;
 
-import com.database.integration.external.kafka.KafkaMessageCache;
 import com.database.integration.core.model.Department;
 import com.database.integration.core.model.products.Product;
 import com.database.integration.core.model.products.ProductType;
 import com.database.integration.core.model.users.User;
-import java.text.MessageFormat;
+import com.database.integration.external.kafka.KafkaMessageCache;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.util.concurrent.ListenableFuture;
-import org.springframework.util.concurrent.ListenableFutureCallback;
 
+import java.util.concurrent.CompletableFuture;
+
+import static java.text.MessageFormat.format;
+
+@Slf4j
 public class KafkaProducer {
 
     @Autowired
@@ -58,20 +61,18 @@ public class KafkaProducer {
     }
 
 
-    private <T> void handleResult(ListenableFuture<SendResult<String, T>> future, T message) {
-        future.addCallback(new ListenableFutureCallback<SendResult<String, T>>() {
-            @Override
-            public void onSuccess(SendResult<String, T> result) {
-                LOGGER.info(MessageFormat.format("Sent message = [ {0} : {1} ] with offset=[ {2} ]",
-                    message.getClass().getSimpleName(), message,
-                    result.getRecordMetadata().offset()));
-            }
+    private <T> void handleResult(CompletableFuture<SendResult<String, T>> future, T message) {
 
-            @Override
-            public void onFailure(Throwable ex) {
+        future.whenComplete((metadata, exception) -> {
+            if (exception == null) {
+                log.info(format("Message [ {0} : {1} ] sent successfully to partition {2} with offset= [ {3} ]",
+                        message.getClass().getSimpleName(), message, metadata.getRecordMetadata().partition(),
+                        metadata.getRecordMetadata().offset()));
+
+            } else {
                 KafkaMessageCache.put(message);
-                LOGGER.warn(MessageFormat.format("Unable to send message =[ {0} : {1} ] due to : {2}",
-                        message.getClass().getSimpleName(), message, ex.getMessage()));
+                log.warn(format("Failed to send message =[ {0} : {1} ] due to : {2}",
+                        message.getClass().getSimpleName(), message, exception.getMessage()));
             }
         });
     }

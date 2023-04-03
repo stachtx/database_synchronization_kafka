@@ -1,22 +1,23 @@
 package com.database.integration.central.services.impl;
 
+import com.database.integration.central.kafka.producer.KafkaProducer;
+import com.database.integration.central.repositories.DepartmentRepository;
+import com.database.integration.central.services.DepartmentService;
 import com.database.integration.core.dto.DepartmentDto;
 import com.database.integration.core.dto.converter.DepartmentConverter;
 import com.database.integration.core.exception.DatabaseErrorException;
 import com.database.integration.core.exception.EntityNotInDatabaseException;
 import com.database.integration.core.model.Department;
-import com.database.integration.central.kafka.producer.KafkaProducer;
-import com.database.integration.central.repositories.DepartmentRepository;
-import com.database.integration.central.services.DepartmentService;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import javax.persistence.PersistenceException;
+import jakarta.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {

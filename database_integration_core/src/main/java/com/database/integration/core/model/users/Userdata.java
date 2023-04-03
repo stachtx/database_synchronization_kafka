@@ -1,15 +1,16 @@
 package com.database.integration.core.model.users;
 
-import com.database.integration.external.utils.Identifiable;
+import com.database.integration.core.utils.Identifiable;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.sun.istack.internal.NotNull;
+
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -22,9 +23,7 @@ import java.util.UUID;
 public class Userdata implements Serializable, Identifiable<UUID> {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "com.centralserver.utils.FallbackUUIDGenerator", parameters = {
-    @Parameter(name = "uuid_gen_strategy_class", value = "org.hibernate.id.uuid.CustomVersionOneStrategy")})
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id = null;
 

@@ -13,11 +13,6 @@ import com.database.integration.core.model.users.Address;
 import com.database.integration.core.model.users.User;
 import com.database.integration.core.model.users.UserRole;
 import com.database.integration.core.model.users.Userdata;
-
-import com.google.common.collect.Lists;
-import java.util.Calendar;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
@@ -25,6 +20,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Calendar;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountUpdateServiceImpl implements AccountUpdateService {
@@ -68,7 +67,7 @@ public class AccountUpdateServiceImpl implements AccountUpdateService {
   }
 
   private List<UserRole> getUserRoles(List<String> roles) {
-    return Lists.newArrayList(userRoleRepository.findAll()).stream()
+    return userRoleRepository.findAll().stream()
         .filter(role -> roles.stream().anyMatch(name -> name.equals(role.getName())))
         .collect(Collectors.toList());
   }

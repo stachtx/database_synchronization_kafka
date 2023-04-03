@@ -1,6 +1,7 @@
 package com.database.integration.central.controllers;
 
 import com.database.integration.core.exception.base.SystemBaseException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,11 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-
 @RestController
 @RequestMapping("/secured/revoke/token")
-@Transactional(propagation = Propagation.REQUIRES_NEW,rollbackFor = SystemBaseException.class)
+@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = SystemBaseException.class)
 public class RevokeTokenController {
 
     @Autowired
@@ -26,8 +25,8 @@ public class RevokeTokenController {
     @ResponseStatus(value = HttpStatus.OK)
     public HttpStatus revokeToken(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
-        if (token != null && token.contains("Bearer")){
-            String tokenId = token.substring("Bearer".length()+1);
+        if (token != null && token.contains("Bearer")) {
+            String tokenId = token.substring("Bearer".length() + 1);
             customerTokenService.revokeToken(tokenId);
             return HttpStatus.ACCEPTED;
         }

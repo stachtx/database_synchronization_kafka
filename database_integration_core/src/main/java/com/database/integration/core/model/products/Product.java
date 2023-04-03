@@ -4,19 +4,8 @@ import com.database.integration.core.model.Department;
 import com.database.integration.core.model.enums.ProductStatus;
 import com.database.integration.core.utils.Identifiable;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.Basic;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-import jakarta.persistence.Version;
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.Calendar;
@@ -37,9 +26,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 public class Product implements Serializable, Identifiable<UUID> {
 
   @Id
-  @GeneratedValue(generator = "UUID")
-  @GenericGenerator(name = "UUID", strategy = "com.centralserver.utils.FallbackUUIDGenerator", parameters = {
-      @Parameter(name = "uuid_gen_strategy_class", value = "org.hibernate.id.uuid.CustomVersionOneStrategy")})
+  @GeneratedValue(strategy = GenerationType.UUID)
   @Column(name = "id", updatable = false, nullable = false)
   private UUID id = null;
 

@@ -1,5 +1,10 @@
 package com.database.integration.central.services.impl;
 
+import com.database.integration.central.kafka.producer.KafkaProducer;
+import com.database.integration.central.repositories.DepartmentRepository;
+import com.database.integration.central.repositories.ProductRepository;
+import com.database.integration.central.repositories.ProductTypeRepository;
+import com.database.integration.central.services.ProductService;
 import com.database.integration.core.dto.ProductDto;
 import com.database.integration.core.dto.converter.ProductConverter;
 import com.database.integration.core.exception.DatabaseErrorException;
@@ -8,16 +13,7 @@ import com.database.integration.core.exception.EntityOptimisticLockException;
 import com.database.integration.core.model.Department;
 import com.database.integration.core.model.products.Product;
 import com.database.integration.core.model.products.ProductType;
-import com.database.integration.central.kafka.producer.KafkaProducer;
-import com.database.integration.central.repositories.DepartmentRepository;
-import com.database.integration.central.repositories.ProductRepository;
-import com.database.integration.central.repositories.ProductTypeRepository;
-import com.database.integration.central.services.ProductService;
-import com.google.common.collect.Lists;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import javax.persistence.PersistenceException;
+import jakarta.persistence.PersistenceException;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
@@ -25,6 +21,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -45,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
     @PreAuthorize("hasAuthority('PRODUCT_LIST_READ')")
     public List<Product> getAllProducts() {
-        List<Product> products = Lists.newArrayList(productRepository.findAll());
+        List<Product> products = productRepository.findAll();
         return products.stream().filter(product -> !product.isDeleted()).collect(Collectors.toList());
     }
 
@@ -53,7 +53,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
     @PreAuthorize("hasAuthority('PRODUCT_LIST_FOR_DEPARTMENT_READ')")
     public List<Product> getAllProductsForDepartment(UUID departmentId) {
-        List<Product> products = Lists.newArrayList(productRepository.findAll()).stream()
+        List<Product> products = productRepository.findAll().stream()
                 .filter(product -> product.getDepartment().getId().equals(departmentId) && !product.isDeleted()).collect(Collectors.toList());
         products.forEach(product -> Hibernate.initialize(product.getProductType()));
         return products;

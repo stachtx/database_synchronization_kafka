@@ -2,8 +2,8 @@ package com.database.integration.central.repositories.impl;
 
 import com.database.integration.central.repositories.custom_interface.CustomDepartmentRepository;
 import com.database.integration.core.model.Department;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.hibernate.ReplicationMode;
 import org.hibernate.Session;
 

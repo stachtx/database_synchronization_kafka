@@ -4,24 +4,15 @@ package com.database.integration.core.model.products;
 import com.database.integration.core.utils.Identifiable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.Version;
-import java.text.MessageFormat;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
-import javax.persistence.*;
 import java.io.Serializable;
+import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -35,9 +26,7 @@ import java.util.UUID;
 public class ProductType implements Serializable, Identifiable<UUID> {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "FallbackUUIDGenerator", parameters = {
-    @Parameter(name = "uuid_gen_strategy_class", value = "CustomVersionOneStrategy")})
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id = null;
 
