@@ -2,11 +2,11 @@ package com.database.integration.external.repositories.impl;
 
 import com.database.integration.core.model.User;
 import com.database.integration.external.repositories.custom_interface.CustomUserRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.hibernate.ReplicationMode;
 import org.hibernate.Session;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 
 public class UserRepositoryImpl implements CustomUserRepository {
