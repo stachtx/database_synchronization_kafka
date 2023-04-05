@@ -8,7 +8,7 @@ import com.database.integration.core.dto.converter.ProductTypeConverter;
 import com.database.integration.core.exception.DatabaseErrorException;
 import com.database.integration.core.exception.EntityNotInDatabaseException;
 import com.database.integration.core.exception.EntityOptimisticLockException;
-import com.database.integration.core.model.products.ProductType;
+import com.database.integration.core.model.ProductType;
 import jakarta.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;

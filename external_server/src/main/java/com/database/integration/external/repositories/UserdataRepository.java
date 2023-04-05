@@ -1,6 +1,6 @@
 package com.database.integration.external.repositories;
 
-import com.database.integration.core.model.users.Userdata;
+import com.database.integration.core.model.Userdata;
 import com.database.integration.external.repositories.custom_interface.CustomUserdataRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

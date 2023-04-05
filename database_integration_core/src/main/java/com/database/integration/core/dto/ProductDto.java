@@ -1,6 +1,6 @@
 package com.database.integration.core.dto;
 
-import com.database.integration.core.model.enums.ProductStatus;
+import com.database.integration.core.model.ProductStatus;
 import lombok.*;
 
 import java.util.UUID;

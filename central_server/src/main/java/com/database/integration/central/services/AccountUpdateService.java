@@ -5,7 +5,7 @@ import com.database.integration.core.exception.DatabaseErrorException;
 import com.database.integration.core.exception.EntityNotInDatabaseException;
 import com.database.integration.core.exception.EntityOptimisticLockException;
 import com.database.integration.core.exception.base.SystemBaseException;
-import com.database.integration.core.model.users.Userdata;
+import com.database.integration.core.model.Userdata;
 import java.util.List;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;

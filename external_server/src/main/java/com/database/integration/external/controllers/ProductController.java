@@ -2,7 +2,7 @@ package com.database.integration.external.controllers;
 
 import com.database.integration.core.dto.ProductDto;
 import com.database.integration.core.exception.base.SystemBaseException;
-import com.database.integration.core.model.products.Product;
+import com.database.integration.core.model.Product;
 import com.database.integration.external.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

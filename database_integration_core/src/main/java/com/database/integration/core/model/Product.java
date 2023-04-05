@@ -1,7 +1,5 @@
-package com.database.integration.core.model.products;
+package com.database.integration.core.model;
 
-import com.database.integration.core.model.Department;
-import com.database.integration.core.model.enums.ProductStatus;
 import com.database.integration.core.utils.Identifiable;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
@@ -12,8 +10,6 @@ import java.util.Calendar;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 

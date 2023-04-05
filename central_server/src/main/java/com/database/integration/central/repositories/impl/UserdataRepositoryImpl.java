@@ -1,7 +1,7 @@
 package com.database.integration.central.repositories.impl;
 
 import com.database.integration.central.repositories.custom_interface.CustomUserdataRepository;
-import com.database.integration.core.model.users.Userdata;
+import com.database.integration.core.model.Userdata;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.hibernate.ReplicationMode;

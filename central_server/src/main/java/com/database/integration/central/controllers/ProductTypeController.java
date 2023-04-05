@@ -4,7 +4,7 @@ package com.database.integration.central.controllers;
 import com.database.integration.central.services.impl.ProductTypeServiceImpl;
 import com.database.integration.core.dto.ProductTypeDto;
 import com.database.integration.core.exception.base.SystemBaseException;
-import com.database.integration.core.model.products.ProductType;
+import com.database.integration.core.model.ProductType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

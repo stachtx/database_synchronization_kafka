@@ -1,6 +1,6 @@
 package com.database.integration.core.dto.converter;
 
-import com.database.integration.core.model.products.ProductType;
+import com.database.integration.core.model.ProductType;
 import com.database.integration.core.dto.ProductTypeDto;
 
 public class ProductTypeConverter {

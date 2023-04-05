@@ -4,7 +4,7 @@ import com.database.integration.core.dto.ProductDto;
 import com.database.integration.core.exception.DatabaseErrorException;
 import com.database.integration.core.exception.EntityNotInDatabaseException;
 import com.database.integration.core.exception.EntityOptimisticLockException;
-import com.database.integration.core.model.products.Product;
+import com.database.integration.core.model.Product;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.security.access.prepost.PreAuthorize;

@@ -5,9 +5,9 @@ import static java.text.MessageFormat.format;
 
 import com.database.integration.central.kafka.KafkaMessageCache;
 import com.database.integration.core.model.Department;
-import com.database.integration.core.model.products.Product;
-import com.database.integration.core.model.products.ProductType;
-import com.database.integration.core.model.users.User;
+import com.database.integration.core.model.Product;
+import com.database.integration.core.model.ProductType;
+import com.database.integration.core.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.util.concurrent.ListenableFuture;
-import org.springframework.util.concurrent.ListenableFutureCallback;
 
 import java.util.concurrent.CompletableFuture;
 

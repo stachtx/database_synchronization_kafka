@@ -6,11 +6,10 @@ import com.database.integration.core.exception.ServiceException;
 import com.database.integration.external.services.UserService;
 import com.database.integration.core.dto.PasswordInfoDto;
 import com.database.integration.external.kafka.producer.KafkaProducer;
-import com.database.integration.core.model.users.User;
-import com.database.integration.core.model.users.UserRole;
+import com.database.integration.core.model.User;
+import com.database.integration.core.model.UserRole;
 import com.database.integration.external.repositories.DepartmentRepository;
 import com.database.integration.external.repositories.UserRepository;
-import com.google.common.collect.Lists;
 import org.hibernate.Hibernate;
 import org.hibernate.StaleObjectStateException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +41,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllUsers() {
-        List<User> users = Lists.newArrayList(userRepository.findAll());
+        List<User> users = userRepository.findAll();
         return users.stream().filter(User::isEnabled).collect(Collectors.toList());
     }
 

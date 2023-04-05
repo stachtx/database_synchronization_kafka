@@ -2,7 +2,7 @@ package com.database.integration.central.repositories;
 
 import com.database.integration.central.repositories.custom_interface.CustomUserdataRepository;
 
-import com.database.integration.core.model.users.Userdata;
+import com.database.integration.core.model.Userdata;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

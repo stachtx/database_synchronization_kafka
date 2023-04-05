@@ -1,4 +1,4 @@
-package com.database.integration.core.model.enums;
+package com.database.integration.core.model;
 
 
 public enum ProductStatus {

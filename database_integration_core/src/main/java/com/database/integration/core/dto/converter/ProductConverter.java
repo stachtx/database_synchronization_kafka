@@ -1,9 +1,9 @@
 package com.database.integration.core.dto.converter;
 
 import com.database.integration.core.model.Department;
-import com.database.integration.core.model.enums.ProductStatus;
-import com.database.integration.core.model.products.Product;
-import com.database.integration.core.model.products.ProductType;
+import com.database.integration.core.model.ProductStatus;
+import com.database.integration.core.model.Product;
+import com.database.integration.core.model.ProductType;
 import com.database.integration.core.dto.ProductDto;
 
 import java.text.SimpleDateFormat;

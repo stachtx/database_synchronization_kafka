@@ -1,4 +1,4 @@
-package com.database.integration.core.model.users;
+package com.database.integration.core.model;
 
 import com.database.integration.core.utils.Identifiable;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

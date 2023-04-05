@@ -5,7 +5,7 @@ import com.database.integration.core.dto.ProductDto;
 import com.database.integration.core.exception.base.SystemBaseException;
 
 import com.database.integration.central.services.ProductService;
-import com.database.integration.core.model.products.Product;
+import com.database.integration.core.model.Product;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

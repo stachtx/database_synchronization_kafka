@@ -1,49 +1,38 @@
 version: "3.8"
 services:
-  db:
+  central_database:
     image: postgres:latest
-    container_name: postgres
-    restart: always
-    ports:
-      - "54320:5432"
+    container_name: central
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
+      - POSTGRES_USER=central
+      - POSTGRES_PASSWORD=central_password
+      - POSTGRES_DB=central_db
     volumes:
-      - local_pgdata:/var/lib/postgresql/data
+      - postgres_central_volume_local:/var/lib/postgresql/data:rw"
+    ports:
+      - "5432:5432"
+  external_database:
+    image: postgres:latest
+    container_name: external
+    environment:
+      - POSTGRES_USER=external
+      - POSTGRES_PASSWORD=external_password
+      - POSTGRES_DB=external_db
+    volumes:
+      - postgres_external_volume_local:/var/lib/postgresql/data:rw"
+    ports:
+      - "5434:5432"
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: pgadmin4
     restart: always
     ports:
-      - "5050:80"
+      - "8080:80"
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
-  zookeeper:
-    image: confluentinc/cp-zookeeper:latest
-    container_name: zookeeper
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-    ports:
-      - 22181:2181
-  kafka:
-    image: confluentinc/cp-kafka:latest
-    container_name: kafka
-    depends_on:
-      - zookeeper
-    ports:
-      - 29092:29092
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 volumes:
-  local_pgdata:
-  pgadmin-data:
+  postgres_central_volume_local:
+    external: true
+  postgres_external_volume_local:
+    external: true

@@ -1,7 +1,7 @@
 package com.database.integration.central.repositories.impl;
 
 import com.database.integration.central.repositories.custom_interface.CustomProductTypeRepository;
-import com.database.integration.core.model.products.ProductType;
+import com.database.integration.core.model.ProductType;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.hibernate.ReplicationMode;

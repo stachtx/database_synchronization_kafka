@@ -1,19 +1,19 @@
 package com.database.integration.external.services.impl;
 
+import com.database.integration.core.dto.ProductDto;
+import com.database.integration.core.dto.converter.ProductConverter;
 import com.database.integration.core.exception.DatabaseErrorException;
 import com.database.integration.core.exception.EntityNotInDatabaseException;
 import com.database.integration.core.exception.EntityOptimisticLockException;
-import com.database.integration.core.dto.ProductDto;
-import com.database.integration.core.dto.converter.ProductConverter;
-import com.database.integration.external.kafka.producer.KafkaProducer;
 import com.database.integration.core.model.Department;
-import com.database.integration.core.model.products.Product;
-import com.database.integration.core.model.products.ProductType;
+import com.database.integration.core.model.Product;
+import com.database.integration.core.model.ProductType;
+import com.database.integration.external.kafka.producer.KafkaProducer;
 import com.database.integration.external.repositories.DepartmentRepository;
 import com.database.integration.external.repositories.ProductRepository;
 import com.database.integration.external.repositories.ProductTypeRepository;
 import com.database.integration.external.services.ProductService;
-import com.google.common.collect.Lists;
+import jakarta.persistence.PersistenceException;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.PersistenceException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -46,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
     @PreAuthorize("hasAuthority('PRODUCT_LIST_READ')")
     public List<Product> getAllProducts() {
-        List<Product> products = Lists.newArrayList(productRepository.findAll());
+        List<Product> products = productRepository.findAll();
         return products.stream().filter(product -> !product.isDeleted()).collect(Collectors.toList());
     }
 
@@ -54,7 +53,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
     @PreAuthorize("hasAuthority('PRODUCT_LIST_FOR_DEPARTMENT_READ')")
     public List<Product> getAllProductsForDepartment(UUID departmentId) {
-        List<Product> products = Lists.newArrayList(productRepository.findAll()).stream()
+        List<Product> products = productRepository.findAll().stream()
                 .filter(product -> product.getDepartment().getId().equals(departmentId) && !product.isDeleted()).collect(Collectors.toList());
         products.forEach(product -> Hibernate.initialize(product.getProductType()));
         return products;

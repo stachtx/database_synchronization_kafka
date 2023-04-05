@@ -1,15 +1,15 @@
 package com.database.integration.external.services.impl;
 
+import com.database.integration.core.dto.ProductTypeDto;
+import com.database.integration.core.dto.converter.ProductTypeConverter;
 import com.database.integration.core.exception.DatabaseErrorException;
 import com.database.integration.core.exception.EntityNotInDatabaseException;
 import com.database.integration.core.exception.EntityOptimisticLockException;
-import com.database.integration.external.services.ProductTypeService;
-import com.database.integration.core.dto.ProductTypeDto;
-import com.database.integration.core.dto.converter.ProductTypeConverter;
+import com.database.integration.core.model.ProductType;
 import com.database.integration.external.kafka.producer.KafkaProducer;
-import com.database.integration.core.model.products.ProductType;
 import com.database.integration.external.repositories.ProductTypeRepository;
-import com.google.common.collect.Lists;
+import com.database.integration.external.services.ProductTypeService;
+import jakarta.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.PersistenceException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -43,7 +42,7 @@ public class ProductTypeServiceImpl implements ProductTypeService {
     @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
     @PreAuthorize("hasAuthority('PRODUCT_TYPE_LIST_READ')")
     public List<ProductType> getAllProductTypes() {
-        List<ProductType> deviceModels = Lists.newArrayList(productTypeRepository.findAll());
+        List<ProductType> deviceModels = productTypeRepository.findAll();
         return deviceModels.stream().filter(productType -> !productType.isDeleted()).collect(Collectors.toList());
     }
 

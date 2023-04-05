@@ -2,7 +2,7 @@ package com.database.integration.central.repositories;
 
 import com.database.integration.central.repositories.custom_interface.CustomProductTypeRepository;
 
-import com.database.integration.core.model.products.ProductType;
+import com.database.integration.core.model.ProductType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

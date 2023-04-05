@@ -1,4 +1,4 @@
-package com.database.integration.core.model.users;
+package com.database.integration.core.model;
 
 
 import com.database.integration.core.utils.Identifiable;
@@ -8,8 +8,6 @@ import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.security.core.userdetails.UserDetails;
 

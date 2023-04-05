@@ -3,8 +3,8 @@ package com.database.integration.external.controllers;
 
 import com.database.integration.core.dto.PasswordInfoDto;
 import com.database.integration.core.exception.base.SystemBaseException;
-import com.database.integration.core.model.users.User;
-import com.database.integration.core.model.users.UserRole;
+import com.database.integration.core.model.User;
+import com.database.integration.core.model.UserRole;
 import com.database.integration.external.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

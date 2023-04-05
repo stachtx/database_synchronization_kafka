@@ -1,6 +1,6 @@
 package com.database.integration.central.repositories.custom_interface;
 
-import com.database.integration.core.model.products.ProductType;
+import com.database.integration.core.model.ProductType;
 
 public interface CustomProductTypeRepository {
 

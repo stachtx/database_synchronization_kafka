@@ -4,9 +4,9 @@ import static java.text.MessageFormat.format;
 
 import com.database.integration.central.kafka.producer.KafkaProducer;
 import com.database.integration.core.model.Department;
-import com.database.integration.core.model.products.Product;
-import com.database.integration.core.model.products.ProductType;
-import com.database.integration.core.model.users.User;
+import com.database.integration.core.model.Product;
+import com.database.integration.core.model.ProductType;
+import com.database.integration.core.model.User;
 import java.util.Deque;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

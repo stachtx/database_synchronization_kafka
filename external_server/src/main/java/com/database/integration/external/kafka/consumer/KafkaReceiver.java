@@ -1,9 +1,9 @@
 package com.database.integration.external.kafka.consumer;
 
 import com.database.integration.core.model.Department;
-import com.database.integration.core.model.products.Product;
-import com.database.integration.core.model.products.ProductType;
-import com.database.integration.core.model.users.User;
+import com.database.integration.core.model.Product;
+import com.database.integration.core.model.ProductType;
+import com.database.integration.core.model.User;
 import com.database.integration.external.services.DepartmentService;
 import com.database.integration.external.services.ProductService;
 import com.database.integration.external.services.ProductTypeService;

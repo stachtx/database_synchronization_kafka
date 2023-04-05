@@ -1,7 +1,7 @@
 package com.database.integration.external.kafka.consumer;
 
 
-import com.database.integration.core.model.users.User;
+import com.database.integration.core.model.User;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;

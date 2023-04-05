@@ -1,6 +1,6 @@
 package com.database.integration.external.repositories.impl;
 
-import com.database.integration.core.model.products.Product;
+import com.database.integration.core.model.Product;
 import com.database.integration.external.repositories.custom_interface.CustomProductRepository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

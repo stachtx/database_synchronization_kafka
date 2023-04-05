@@ -8,8 +8,8 @@ import com.database.integration.core.dto.PasswordInfoDto;
 import com.database.integration.core.exception.EntityNotInDatabaseException;
 import com.database.integration.core.exception.EntityOptimisticLockException;
 import com.database.integration.core.exception.ServiceException;
-import com.database.integration.core.model.users.User;
-import com.database.integration.core.model.users.UserRole;
+import com.database.integration.core.model.User;
+import com.database.integration.core.model.UserRole;
 
 
 import java.util.ArrayList;

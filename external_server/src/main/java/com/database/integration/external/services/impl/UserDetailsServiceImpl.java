@@ -1,6 +1,6 @@
 package com.database.integration.external.services.impl;
 
-import com.database.integration.core.model.users.User;
+import com.database.integration.core.model.User;
 import com.database.integration.external.repositories.UserRepository;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;

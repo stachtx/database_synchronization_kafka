@@ -1,6 +1,6 @@
 package com.database.integration.external.repositories.impl;
 
-import com.database.integration.core.model.users.Userdata;
+import com.database.integration.core.model.Userdata;
 import com.database.integration.external.repositories.custom_interface.CustomUserdataRepository;
 import org.hibernate.ReplicationMode;
 import org.hibernate.Session;

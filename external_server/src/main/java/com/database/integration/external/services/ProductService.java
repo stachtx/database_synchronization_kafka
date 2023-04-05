@@ -4,7 +4,7 @@ import com.database.integration.core.exception.DatabaseErrorException;
 import com.database.integration.core.exception.EntityNotInDatabaseException;
 import com.database.integration.core.exception.EntityOptimisticLockException;
 import com.database.integration.core.dto.ProductDto;
-import com.database.integration.core.model.products.Product;
+import com.database.integration.core.model.Product;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
