@@ -4,7 +4,6 @@ import com.database.integration.central.repositories.custom_interface.CustomProd
 import com.database.integration.core.model.Product;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.hibernate.ReplicationMode;
 import org.hibernate.Session;
 
 
@@ -21,7 +20,7 @@ public class ProductRepositoryImpl implements CustomProductRepository {
     public void merge(Product entity) {
         Session session = (Session) entityManager.getDelegate();
         detach(entity);
-        session.replicate(entity, ReplicationMode.LATEST_VERSION);
+        session.merge(entity);
     }
 
 }

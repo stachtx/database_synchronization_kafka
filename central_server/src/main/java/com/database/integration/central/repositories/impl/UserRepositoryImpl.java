@@ -4,7 +4,6 @@ import com.database.integration.central.repositories.custom_interface.CustomUser
 import com.database.integration.core.model.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.hibernate.ReplicationMode;
 import org.hibernate.Session;
 
 
@@ -22,6 +21,6 @@ public class UserRepositoryImpl implements CustomUserRepository {
     public void merge(User user) {
         Session session = (Session) entityManager.getDelegate();
         detach(user);
-        session.replicate(user, ReplicationMode.LATEST_VERSION);
+        session.merge(user);
     }
 }
