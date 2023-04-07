@@ -22,7 +22,7 @@ public class KafkaTopicConfig {
         configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         return new KafkaAdmin(configs);
     }
-
+    //TODO Add topics
     @Bean
     public NewTopic centralTopicUser() {
         return new NewTopic("central-topic-user", 1, (short) 1);

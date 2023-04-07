@@ -1,0 +1,33 @@
+spring:
+  profiles:
+    active: 'postgres'
+  application:
+    name: central-server
+  datasource:
+    sqlScriptEncoding: UTF-8
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+  json:
+    add:
+      type:
+        headers: true
+  autoconfigure:
+    exclude: >-
+      org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration
+logging:
+  level:
+    org:
+      springframework:
+        security:
+          oauth2: debug
+server:
+  error:
+    whitelabel:
+      enabled: false
+  port: '8090'
+kafka:
+  bootstrapAddress: 'localhost:9092'
+  groupId: central-server
+  cache:
+    cron: 0 0/5 * * * *

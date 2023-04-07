@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: 'jdbc:postgresql://localhost:5432/test_db?useUnicode&createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true'
+    username: test
+    password: test_password
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL95Dialect
+        format_sql: true
+        id:
+          new_generator_mappings: true
+        temp:
+          use_jdbc_metadata_defaults: false

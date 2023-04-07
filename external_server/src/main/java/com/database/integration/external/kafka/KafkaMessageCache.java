@@ -20,7 +20,7 @@ public class KafkaMessageCache {
 
     public static void put(Object message) {
         cachedMessages.push(message);
-        LOGGER.info("Message with " + message.getClass().getSimpleName() + " : " + message.toString() + " is cached");
+        LOGGER.info("Message with " + message.getClass().getSimpleName() + " : " + message + " is cached");
     }
 
     public static boolean remove(Object message) {

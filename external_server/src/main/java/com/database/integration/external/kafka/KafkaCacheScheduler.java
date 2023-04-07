@@ -1,10 +1,10 @@
 package com.database.integration.external.kafka;
 
-import com.database.integration.external.kafka.producer.KafkaProducer;
 import com.database.integration.core.model.Department;
 import com.database.integration.core.model.Product;
 import com.database.integration.core.model.ProductType;
 import com.database.integration.core.model.User;
+import com.database.integration.external.kafka.producer.KafkaProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,19 +29,19 @@ public class KafkaCacheScheduler {
             switch (message.getClass().getSimpleName()) {
                 case "User":
                     kafkaProducer.send((User) message);
-                    LOGGER.warn("Cached message User : " + message.toString() + " is sent");
+                    LOGGER.warn("Cached message User : " + message + " is sent");
                     break;
                 case "Product":
                     kafkaProducer.send((Product) message);
-                    LOGGER.warn("Cached message Product : " + message.toString() + " is sent");
+                    LOGGER.warn("Cached message Product : " + message + " is sent");
                     break;
                 case "ProductType":
                     kafkaProducer.send((ProductType) message);
-                    LOGGER.warn("Cached message ProductType : " + message.toString() + " is sent");
+                    LOGGER.warn("Cached message ProductType : " + message + " is sent");
                     break;
                 case "Department":
                     kafkaProducer.send((Department) message);
-                    LOGGER.warn("Cached message Department : " + message.toString() + " is sent");
+                    LOGGER.warn("Cached message Department : " + message + " is sent");
                     break;
                 default:
                     LOGGER.warn("Incorrect object type");
