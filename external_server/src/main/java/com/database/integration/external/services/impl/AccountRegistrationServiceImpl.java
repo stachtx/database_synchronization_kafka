@@ -23,6 +23,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.database.integration.core.exception.DatabaseErrorException.ErrorMessage.EMAIL_TAKEN;
+import static com.database.integration.core.exception.DatabaseErrorException.ErrorMessage.USERNAME_TAKEN;
+
 @Service
 public class AccountRegistrationServiceImpl implements AccountRegistrationService {
 
@@ -73,10 +76,10 @@ public class AccountRegistrationServiceImpl implements AccountRegistrationServic
 
     private void validation(RegistrationDto data) throws DatabaseErrorException {
         if (userdataRepository.findByEmail(data.getEmail()).isPresent()) {
-            throw new DatabaseErrorException(DatabaseErrorException.EMAIL_TAKEN);
+            throw new DatabaseErrorException(EMAIL_TAKEN);
         }
         if (userRepository.findByUsername(data.getUsername()).isPresent()) {
-            throw new DatabaseErrorException(DatabaseErrorException.USERNAME_TAKEN);
+            throw new DatabaseErrorException(USERNAME_TAKEN);
         }
     }
 

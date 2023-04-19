@@ -1,7 +1,7 @@
 package com.database.integration.core.dto.converter;
 
-import com.database.integration.core.model.Department;
 import com.database.integration.core.dto.DepartmentDto;
+import com.database.integration.core.model.Department;
 
 public class DepartmentConverter {
 
@@ -13,11 +13,17 @@ public class DepartmentConverter {
                 .build();
     }
 
+    public static Department toDepartment(DepartmentDto departmentDto) {
+        Department department = new Department();
+        department.setName(departmentDto.getName());
+        department.setVersion(departmentDto.getVersion());
+        return department;
+    }
+
     public static Department toDepartment(DepartmentDto departmentDto, Department oldDepartment) {
         oldDepartment.setName(departmentDto.getName());
         oldDepartment.setVersion(departmentDto.getVersion());
         return oldDepartment;
     }
-
 }
 

@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class EntityNotInDatabaseException extends SystemBaseException {
 
-    public static final String NO_OBJECT = "error_no_object_in_database";
-    public static final String NO_USERNAME = "error_no_username_in_database";
 
     public EntityNotInDatabaseException() {
     }
@@ -17,8 +15,23 @@ public class EntityNotInDatabaseException extends SystemBaseException {
         super(message);
     }
 
+    public EntityNotInDatabaseException(ErrorMessage errorMessage) {
+        super(errorMessage.message);
+    }
+
     public EntityNotInDatabaseException(String message, Throwable cause) {
         super(message, cause);
     }
 
+
+    public enum ErrorMessage {
+        NO_OBJECT("error_no_object_in_database"),
+        NO_USERNAME("error_no_username_in_database");
+
+        public final String message;
+
+        ErrorMessage(String message) {
+            this.message = message;
+        }
+    }
 }

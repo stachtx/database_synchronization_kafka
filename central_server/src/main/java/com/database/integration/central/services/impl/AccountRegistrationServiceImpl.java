@@ -7,7 +7,6 @@ import com.database.integration.central.repositories.UserdataRepository;
 import com.database.integration.central.services.AccountRegistrationService;
 import com.database.integration.core.dto.RegistrationDto;
 import com.database.integration.core.exception.DatabaseErrorException;
-import com.database.integration.core.exception.EntityNotInDatabaseException;
 import com.database.integration.core.model.Address;
 import com.database.integration.core.model.User;
 import com.database.integration.core.model.UserRole;
@@ -17,11 +16,15 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.database.integration.core.exception.DatabaseErrorException.ErrorMessage.EMAIL_TAKEN;
+import static com.database.integration.core.exception.DatabaseErrorException.ErrorMessage.USERNAME_TAKEN;
 
 @Service
 public class AccountRegistrationServiceImpl implements AccountRegistrationService {
@@ -43,9 +46,9 @@ public class AccountRegistrationServiceImpl implements AccountRegistrationServic
     private KafkaProducer kafkaProducer;
 
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     @PreAuthorize("hasAuthority('USER_CREATE')")
-    public void registerNewUserAccount(final RegistrationDto data, boolean verified) throws EntityNotInDatabaseException, DatabaseErrorException {
+    public void registerNewUserAccount(final RegistrationDto data, boolean verified) throws DatabaseErrorException {
 
         validation(data);
         User user = new User();
@@ -73,10 +76,10 @@ public class AccountRegistrationServiceImpl implements AccountRegistrationServic
 
     private void validation(RegistrationDto data) throws DatabaseErrorException {
         if (userdataRepository.findByEmail(data.getEmail()).isPresent()) {
-            throw new DatabaseErrorException(DatabaseErrorException.EMAIL_TAKEN);
+            throw new DatabaseErrorException(EMAIL_TAKEN);
         }
         if (userRepository.findByUsername(data.getUsername()).isPresent()) {
-            throw new DatabaseErrorException(DatabaseErrorException.USERNAME_TAKEN);
+            throw new DatabaseErrorException(USERNAME_TAKEN);
         }
     }
 

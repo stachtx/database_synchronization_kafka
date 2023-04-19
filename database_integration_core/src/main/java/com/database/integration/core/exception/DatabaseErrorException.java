@@ -7,23 +7,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.FORBIDDEN)
 public class DatabaseErrorException extends SystemBaseException {
 
-    public static final String DATABASE_ERROR = "error_database";
-    public static final String ILLEGAL_ARGUMENT = "illegal_argument";
-    // User response codes
-    public static final String EMAIL_TAKEN = "email_taken";
-    public static final String USERNAME_TAKEN = "un_taken";
-    public static final String SUCCESS = "success";
-    public static final String SAME_PASSWORD = "same_password";
-
-    //Department response codes
-    public static final String DEPARTMENT_NAME_TAKEN = "dn_taken";
-
-    //Product response codes
-    public static final String SERIAL_NUMBER_NAME_TAKEN = "sn_taken";
-
-    //Product mode response codes
-    public static final String PRODUCT_TYPE_NAME_NAME_TAKEN = "dmn_taken";
-
 
     public DatabaseErrorException() {
     }
@@ -32,8 +15,30 @@ public class DatabaseErrorException extends SystemBaseException {
         super(message);
     }
 
+    public DatabaseErrorException(ErrorMessage errorMessage) {
+        super(errorMessage.message);
+    }
+
     public DatabaseErrorException(String message, Throwable cause) {
         super(message, cause);
     }
 
+
+    public enum ErrorMessage {
+        DATABASE_ERROR("error_database"),
+        ILLEGAL_ARGUMENT("illegal_argument"),
+        EMAIL_TAKEN("email_taken"),
+        USERNAME_TAKEN("un_taken"),
+        SUCCESS("success"),
+        SAME_PASSWORD("same_password"),
+        DEPARTMENT_NAME_TAKEN("dn_taken"),
+        SERIAL_NUMBER_NAME_TAKEN("sn_taken"),
+        PRODUCT_TYPE_NAME_NAME_TAKEN("dmn_taken");
+
+        public final String message;
+
+        ErrorMessage(String message) {
+            this.message = message;
+        }
+    }
 }

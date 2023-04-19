@@ -25,15 +25,20 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.database.integration.core.exception.DatabaseErrorException.ErrorMessage.EMAIL_TAKEN;
+import static com.database.integration.core.exception.DatabaseErrorException.ErrorMessage.USERNAME_TAKEN;
+import static com.database.integration.core.exception.EntityNotInDatabaseException.ErrorMessage.NO_OBJECT;
+import static com.database.integration.core.exception.EntityOptimisticLockException.ErrorMessage.OPTIMISTIC_LOCK;
+
 @Service
 public class AccountUpdateServiceImpl implements AccountUpdateService {
 
-  @Qualifier("userPasswordEncoder")
-  @Autowired
-  private PasswordEncoder passwordEncoder;
+    @Qualifier("userPasswordEncoder")
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-  @Autowired
-  private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
   @Autowired
   private UserRoleRepository userRoleRepository;
@@ -85,8 +90,8 @@ public class AccountUpdateServiceImpl implements AccountUpdateService {
 
   private User getUser(AccountDto accountDto)
       throws EntityNotInDatabaseException, DatabaseErrorException {
-    User user = userRepository.findById(accountDto.getId()).orElseThrow(
-        (() -> new EntityNotInDatabaseException(EntityNotInDatabaseException.NO_OBJECT)));
+      User user = userRepository.findById(accountDto.getId()).orElseThrow(
+              (() -> new EntityNotInDatabaseException(NO_OBJECT)));
     usernameIsPresent(accountDto.getUsername(), user.getUsername());
     userRepository.detach(user);
     user.setUsername(accountDto.getUsername());
@@ -100,14 +105,14 @@ public class AccountUpdateServiceImpl implements AccountUpdateService {
       throws DatabaseErrorException {
     if (userRepository.findByUsername(newUsername).isPresent() && !oldUsername.equals(
         newUsername)) {
-      throw new DatabaseErrorException(DatabaseErrorException.USERNAME_TAKEN);
+        throw new DatabaseErrorException(USERNAME_TAKEN);
     }
   }
 
   private Userdata getUserdata(AccountDto accountDto, User user, Address address)
       throws EntityNotInDatabaseException, DatabaseErrorException {
-    Userdata userdata = userdataRepository.findById(user.getUserdata().getId()).orElseThrow(
-        () -> new EntityNotInDatabaseException(EntityNotInDatabaseException.NO_OBJECT));
+      Userdata userdata = userdataRepository.findById(user.getUserdata().getId()).orElseThrow(
+              () -> new EntityNotInDatabaseException(NO_OBJECT));
     userdataRepository.detach(userdata);
     emailIsPresent(accountDto.getEmail(), userdata.getEmail());
     userdata.setEmail(accountDto.getEmail());
@@ -124,7 +129,7 @@ public class AccountUpdateServiceImpl implements AccountUpdateService {
   private void emailIsPresent(String newEmail, String oldEmail) throws DatabaseErrorException {
     if (userdataRepository.findByEmail(newEmail).isPresent() && !oldEmail
         .equals(newEmail)) {
-      throw new DatabaseErrorException(DatabaseErrorException.EMAIL_TAKEN);
+        throw new DatabaseErrorException(EMAIL_TAKEN);
     }
   }
   private static Address getAddress(AccountDto accountDto) {
@@ -143,7 +148,7 @@ public class AccountUpdateServiceImpl implements AccountUpdateService {
       User savedUser = userRepository.saveAndFlush(user);
       kafkaProducer.send(savedUser);
     } catch (ObjectOptimisticLockingFailureException e) {
-      throw new EntityOptimisticLockException(EntityOptimisticLockException.OPTIMISTIC_LOCK);
+        throw new EntityOptimisticLockException(OPTIMISTIC_LOCK);
     }
   }
 }

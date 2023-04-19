@@ -4,7 +4,9 @@ import com.database.integration.core.utils.Identifiable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
@@ -15,6 +17,8 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @EnableAutoConfiguration
 @Table(name = "USER_ROLE")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})

@@ -42,7 +42,7 @@ public class DepartmentController {
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     public ResponseEntity<?> create(@RequestBody DepartmentDto departmentDto) throws SystemBaseException {
-        departmentService.createDepartment(departmentDto);
+        Department department = departmentService.createDepartment(departmentDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

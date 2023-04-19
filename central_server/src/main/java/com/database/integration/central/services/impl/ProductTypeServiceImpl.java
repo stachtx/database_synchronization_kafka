@@ -21,6 +21,10 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.database.integration.core.exception.DatabaseErrorException.ErrorMessage.PRODUCT_TYPE_NAME_NAME_TAKEN;
+import static com.database.integration.core.exception.EntityNotInDatabaseException.ErrorMessage.NO_OBJECT;
+import static com.database.integration.core.exception.EntityOptimisticLockException.ErrorMessage.OPTIMISTIC_LOCK;
+
 @Service
 public class ProductTypeServiceImpl implements ProductTypeService {
 
@@ -35,7 +39,7 @@ public class ProductTypeServiceImpl implements ProductTypeService {
     @PreAuthorize("hasAuthority('PRODUCT_TYPE_READ')")
     public ProductType getProductTypeById(UUID id) throws EntityNotInDatabaseException {
         ProductType productType = productTypeRepository.findById(id).orElseThrow(
-                () -> new EntityNotInDatabaseException(EntityNotInDatabaseException.NO_OBJECT));
+                () -> new EntityNotInDatabaseException(NO_OBJECT));
         return productType.isDeleted() ? null : productType;
     }
 
@@ -58,7 +62,7 @@ public class ProductTypeServiceImpl implements ProductTypeService {
                     ProductTypeConverter.toProductType(productTypeDto, productType));
             kafkaProducer.send(savedProductType);
         } catch (PersistenceException e) {
-            throw new DatabaseErrorException(DatabaseErrorException.PRODUCT_TYPE_NAME_NAME_TAKEN);
+            throw new DatabaseErrorException(PRODUCT_TYPE_NAME_NAME_TAKEN);
         }
     }
 
@@ -70,7 +74,7 @@ public class ProductTypeServiceImpl implements ProductTypeService {
         try {
             ProductType oldProductType = productTypeRepository.findById(productTypeDto.getId())
                     .orElseThrow(
-                            () -> new EntityNotInDatabaseException(EntityNotInDatabaseException.NO_OBJECT));
+                            () -> new EntityNotInDatabaseException(NO_OBJECT));
             productTypeRepository.detach(oldProductType);
             ProductType updatedProductType = ProductTypeConverter.toProductType(productTypeDto,
                     oldProductType);
@@ -78,9 +82,9 @@ public class ProductTypeServiceImpl implements ProductTypeService {
             kafkaProducer.send(updatedProductType);
         } catch (ObjectOptimisticLockingFailureException e) {
             e.printStackTrace();
-            throw new EntityOptimisticLockException(EntityOptimisticLockException.OPTIMISTIC_LOCK);
+            throw new EntityOptimisticLockException(OPTIMISTIC_LOCK);
         } catch (PersistenceException e) {
-            throw new DatabaseErrorException(DatabaseErrorException.PRODUCT_TYPE_NAME_NAME_TAKEN);
+            throw new DatabaseErrorException(PRODUCT_TYPE_NAME_NAME_TAKEN);
         }
     }
 
@@ -89,7 +93,7 @@ public class ProductTypeServiceImpl implements ProductTypeService {
     @PreAuthorize("hasAuthority('PRODUCT_TYPE_DELETE')")
     public void deleteProductTypeById(UUID id) throws EntityNotInDatabaseException {
         ProductType productType = productTypeRepository.findById(id).orElseThrow(
-                () -> new EntityNotInDatabaseException(EntityNotInDatabaseException.NO_OBJECT));
+                () -> new EntityNotInDatabaseException(NO_OBJECT));
         productType.setDeleted(true);
         kafkaProducer.send(productType);
     }

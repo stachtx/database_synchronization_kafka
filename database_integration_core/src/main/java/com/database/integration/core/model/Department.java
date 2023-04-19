@@ -5,19 +5,23 @@ import com.database.integration.core.utils.Identifiable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-
 
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+
+@Data
 @Entity
-@Getter
-@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EnableAutoConfiguration
 @Table(name = "DEPARTMENT")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -44,7 +48,7 @@ public class Department implements Serializable, Identifiable<UUID> {
 
     @Override
     public String toString() {
-        return String.format("id:" + id.toString() + " username: " + name);
+        return String.format("id:" + id.toString() + " department name: " + name);
     }
 }
 

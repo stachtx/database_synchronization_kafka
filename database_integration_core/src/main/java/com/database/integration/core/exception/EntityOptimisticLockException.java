@@ -4,8 +4,6 @@ import com.database.integration.core.exception.base.SystemBaseException;
 
 public class EntityOptimisticLockException extends SystemBaseException {
 
-    public static final String OPTIMISTIC_LOCK = "error_optimistic_lock";
-
     public EntityOptimisticLockException() {
     }
 
@@ -13,8 +11,21 @@ public class EntityOptimisticLockException extends SystemBaseException {
         super(message);
     }
 
+    public EntityOptimisticLockException(ErrorMessage errorMessage) {
+        super(errorMessage.message);
+    }
+
     public EntityOptimisticLockException(String message, Throwable cause) {
         super(message, cause);
     }
 
+    public enum ErrorMessage {
+        OPTIMISTIC_LOCK("error_optimistic_lock");
+
+        public final String message;
+
+        ErrorMessage(String message) {
+            this.message = message;
+        }
+    }
 }

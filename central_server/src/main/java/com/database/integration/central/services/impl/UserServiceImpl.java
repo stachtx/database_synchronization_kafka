@@ -1,7 +1,6 @@
 package com.database.integration.central.services.impl;
 
 import com.database.integration.central.kafka.producer.KafkaProducer;
-import com.database.integration.central.repositories.DepartmentRepository;
 import com.database.integration.central.repositories.UserRepository;
 import com.database.integration.central.services.UserService;
 import com.database.integration.core.dto.PasswordInfoDto;
@@ -10,11 +9,6 @@ import com.database.integration.core.exception.EntityOptimisticLockException;
 import com.database.integration.core.exception.ServiceException;
 import com.database.integration.core.model.User;
 import com.database.integration.core.model.UserRole;
-
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.hibernate.Hibernate;
 import org.hibernate.StaleObjectStateException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +18,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.database.integration.core.exception.EntityNotInDatabaseException.ErrorMessage.NO_OBJECT;
+import static com.database.integration.core.exception.EntityOptimisticLockException.ErrorMessage.OPTIMISTIC_LOCK;
+
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;
-
-    @Autowired
-    DepartmentRepository departmentRepository;
 
     @Autowired
     KafkaProducer kafkaProducer;
@@ -50,7 +48,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @PreAuthorize("hasAuthority('USER_READ')")
     public User getUser(String username) throws EntityNotInDatabaseException {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotInDatabaseException(EntityNotInDatabaseException.NO_OBJECT));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotInDatabaseException(NO_OBJECT));
         Hibernate.initialize(user.getUsername());
         Hibernate.initialize(user.getUserRoles());
         Hibernate.initialize(user.getAuthorities());
@@ -62,7 +60,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @PreAuthorize("hasAuthority('USER_ROLES_READ')")
     public List<UserRole> getUserRoles(String username) throws EntityNotInDatabaseException {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotInDatabaseException(EntityNotInDatabaseException.NO_OBJECT));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotInDatabaseException(NO_OBJECT));
         return new ArrayList<>(user.getUserRoles());
     }
 
@@ -70,7 +68,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @PreAuthorize("hasAuthority('USER_DELETE')")
     public void deleteUser(String username) throws EntityNotInDatabaseException {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotInDatabaseException(EntityNotInDatabaseException.NO_OBJECT));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotInDatabaseException(NO_OBJECT));
         user.setEnabled(false);
         kafkaProducer.send(user);
     }
@@ -79,7 +77,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @PreAuthorize("hasAuthority('PASSWORD_ADMIN_READ')")
     public PasswordInfoDto getPasswordForAdmin(String username) throws EntityNotInDatabaseException {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotInDatabaseException(EntityNotInDatabaseException.NO_OBJECT));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotInDatabaseException(NO_OBJECT));
         return PasswordInfoDto.builder().userVersion(user.getVersion()).username(username).build();
     }
 
@@ -88,14 +86,14 @@ public class UserServiceImpl implements UserService {
     @PreAuthorize("hasAuthority('PASSWORD_ADMIN_UPDATE')")
     public void updatePasswordForAdmin(PasswordInfoDto passwordInfoForAdmin) throws EntityNotInDatabaseException, EntityOptimisticLockException {
         try {
-            User user = userRepository.findByUsername(passwordInfoForAdmin.getUsername()).orElseThrow(() -> new EntityNotInDatabaseException(EntityNotInDatabaseException.NO_OBJECT));
+            User user = userRepository.findByUsername(passwordInfoForAdmin.getUsername()).orElseThrow(() -> new EntityNotInDatabaseException(NO_OBJECT));
             userRepository.detach(user);
             user.setPassword(passwordEncoder.encode(passwordInfoForAdmin.getNewPassword()));
             user.setVersion(passwordInfoForAdmin.getUserVersion());
             userRepository.saveAndFlush(user);
             kafkaProducer.send(user);
         } catch (StaleObjectStateException e) {
-            throw new EntityOptimisticLockException(EntityOptimisticLockException.OPTIMISTIC_LOCK);
+            throw new EntityOptimisticLockException(OPTIMISTIC_LOCK);
         }
     }
 
@@ -103,7 +101,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @PreAuthorize("hasAuthority('PASSWORD_READ')")
     public PasswordInfoDto getPassword(String username) throws EntityNotInDatabaseException {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotInDatabaseException(EntityNotInDatabaseException.NO_OBJECT));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotInDatabaseException(NO_OBJECT));
         return PasswordInfoDto.builder().userVersion(user.getVersion()).build();
     }
 
@@ -111,7 +109,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @PreAuthorize("hasAuthority('PASSWORD_UPDATE')")
     public void updatePassword(PasswordInfoDto passwordInfoDto, String username) throws EntityNotInDatabaseException, ServiceException {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotInDatabaseException(EntityNotInDatabaseException.NO_OBJECT));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotInDatabaseException(NO_OBJECT));
         if (!(passwordInfoDto.getNewPassword().length() >= 8 && passwordInfoDto.getOldPassword().length() >= 8)) {
             throw new ServiceException(ServiceException.INCORRECT_LENGTH_PASSWORD);
         }
