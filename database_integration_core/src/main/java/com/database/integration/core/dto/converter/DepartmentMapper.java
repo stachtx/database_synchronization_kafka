@@ -20,6 +20,13 @@ public class DepartmentMapper {
         return department;
     }
 
+    public static Department toDepartment(DepartmentDto departmentDto) {
+        Department department = new Department();
+        department.setName(departmentDto.getName());
+        department.setVersion(departmentDto.getVersion());
+        return department;
+    }
+
     public static Department toDepartment(DepartmentDto departmentDto, Department oldDepartment) {
         oldDepartment.setName(departmentDto.getName());
         oldDepartment.setVersion(departmentDto.getVersion());
