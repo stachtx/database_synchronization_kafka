@@ -1,16 +1,19 @@
 package com.database.integration.core.dto;
 
-import lombok.*;
-
 import java.io.Serializable;
-import java.util.List;
 import java.util.UUID;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
-public class AccountDto implements Serializable {
+public class UserUpdateDto implements Serializable {
+
     private UUID id;
     private String username;
     private String email;

@@ -1,9 +1,12 @@
 package com.database.integration.core.dto;
 
 import com.database.integration.core.model.ProductStatus;
-import lombok.*;
-
 import java.util.UUID;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
@@ -11,12 +14,10 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class ProductDto {
 
-    private UUID id = null;
+    private UUID id;
     private long version;
     private String serialNumber;
     private ProductStatus status;
     private UUID productTypeId;
-    private String lastUpdate;
-    private String createDate;
     private UUID departmentId;
 }

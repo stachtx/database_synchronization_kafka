@@ -4,21 +4,37 @@ package com.database.integration.core.model;
 import com.database.integration.core.utils.Identifiable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.OrderBy;
+import jakarta.persistence.Table;
+import jakarta.persistence.Version;
+import java.io.Serializable;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 @Entity
-@Getter
-@Setter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "USER_")
 @EnableAutoConfiguration
 @EqualsAndHashCode(of = "id")
@@ -59,13 +75,14 @@ public class User implements UserDetails, Serializable, Identifiable<UUID> {
     @OrderBy
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "USERS_ROLES", joinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "ID"),
-            inverseJoinColumns = @JoinColumn(name = "USER_ROLE_ID", referencedColumnName = "ID"))
-    private Collection<UserRole> userRoles;
+        inverseJoinColumns = @JoinColumn(name = "USER_ROLE_ID", referencedColumnName = "ID"))
+    private Set<UserRole> userRoles;
 
     @Override
     @JsonIgnore
-    public Collection<Authority> getAuthorities() {
-        return this.getUserRoles().stream().flatMap(x -> x.getAuthorities().stream()).collect(Collectors.toList());
+    public Set<Authority> getAuthorities() {
+        return this.getUserRoles().stream().flatMap(x -> x.getAuthorities().stream()).collect(
+            Collectors.toSet());
     }
 
     @Override

@@ -1,14 +1,18 @@
 package com.database.integration.core.dto;
 
-import lombok.*;
-
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
-public class RegistrationDto {
+public class UserRegistrationDto {
+
     private String username;
     private String password;
     private String email;

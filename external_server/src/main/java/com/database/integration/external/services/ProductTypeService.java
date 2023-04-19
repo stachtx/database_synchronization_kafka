@@ -1,16 +1,15 @@
 package com.database.integration.external.services;
 
-import com.database.integration.core.exception.EntityOptimisticLockException;
 import com.database.integration.core.dto.ProductTypeDto;
 import com.database.integration.core.exception.DatabaseErrorException;
 import com.database.integration.core.exception.EntityNotInDatabaseException;
+import com.database.integration.core.exception.EntityOptimisticLockException;
 import com.database.integration.core.model.ProductType;
+import java.util.List;
+import java.util.UUID;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.UUID;
 
 public interface ProductTypeService {
 
@@ -24,11 +23,12 @@ public interface ProductTypeService {
 
     @Transactional(propagation = Propagation.MANDATORY)
     @PreAuthorize("hasAuthority('PRODUCT_TYPE_CREATE')")
-    void createNewDeviceModel(ProductTypeDto productTypeDto) throws DatabaseErrorException;
+    ProductType createProductType(ProductTypeDto productTypeDto) throws DatabaseErrorException;
 
     @Transactional(propagation = Propagation.MANDATORY)
     @PreAuthorize("hasAuthority('PRODUCT_TYPE_UPDATE')")
-    void updateProductType(ProductTypeDto productTypeDto) throws EntityNotInDatabaseException, EntityOptimisticLockException, DatabaseErrorException;
+    ProductType updateProductType(ProductTypeDto productTypeDto)
+        throws EntityNotInDatabaseException, EntityOptimisticLockException, DatabaseErrorException;
 
     @Transactional(propagation = Propagation.MANDATORY)
     @PreAuthorize("hasAuthority('PRODUCT_TYPE_DELETE')")

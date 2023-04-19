@@ -1,16 +1,15 @@
 package com.database.integration.external.services;
 
+import com.database.integration.core.dto.ProductDto;
 import com.database.integration.core.exception.DatabaseErrorException;
 import com.database.integration.core.exception.EntityNotInDatabaseException;
 import com.database.integration.core.exception.EntityOptimisticLockException;
-import com.database.integration.core.dto.ProductDto;
 import com.database.integration.core.model.Product;
+import java.util.List;
+import java.util.UUID;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.UUID;
 
 public interface ProductService {
 
@@ -24,7 +23,8 @@ public interface ProductService {
 
   @Transactional(propagation = Propagation.MANDATORY)
   @PreAuthorize("hasAuthority('PRODUCT_CREATE')")
-  void createNewProduct(ProductDto productDto) throws DatabaseErrorException;
+  void createNewProduct(ProductDto productDto)
+      throws DatabaseErrorException, EntityNotInDatabaseException;
 
   @Transactional(propagation = Propagation.MANDATORY)
   @PreAuthorize("hasAuthority('PRODUCT_UPDATE')")

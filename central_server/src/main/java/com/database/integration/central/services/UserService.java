@@ -1,6 +1,6 @@
 package com.database.integration.central.services;
 
-import com.database.integration.core.dto.PasswordInfoDto;
+import com.database.integration.core.dto.PasswordUpdateDto;
 import com.database.integration.core.exception.EntityNotInDatabaseException;
 import com.database.integration.core.exception.EntityOptimisticLockException;
 import com.database.integration.core.exception.ServiceException;
@@ -26,21 +26,23 @@ public interface UserService {
     @PreAuthorize("hasAuthority('USER_DELETE')")
     void deleteUser(String username) throws EntityNotInDatabaseException;
 
-    @Transactional
-    @PreAuthorize("hasAuthority('PASSWORD_ADMIN_READ')")
-    PasswordInfoDto getPasswordForAdmin(String username) throws EntityNotInDatabaseException;
+  @Transactional
+  @PreAuthorize("hasAuthority('PASSWORD_ADMIN_READ')")
+  PasswordUpdateDto getPasswordForAdmin(String username) throws EntityNotInDatabaseException;
 
-    @Transactional
-    @PreAuthorize("hasAuthority('PASSWORD_ADMIN_UPDATE')")
-    void updatePasswordForAdmin(PasswordInfoDto passwordInfoForAdmin) throws EntityNotInDatabaseException, EntityOptimisticLockException;
+  @Transactional
+  @PreAuthorize("hasAuthority('PASSWORD_ADMIN_UPDATE')")
+  void updatePasswordForAdmin(PasswordUpdateDto passwordInfoForAdmin)
+      throws EntityNotInDatabaseException, EntityOptimisticLockException;
 
-    @Transactional
-    @PreAuthorize("hasAuthority('PASSWORD_READ')")
-    PasswordInfoDto getPassword(String username) throws EntityNotInDatabaseException;
+  @Transactional
+  @PreAuthorize("hasAuthority('PASSWORD_READ')")
+  PasswordUpdateDto getPassword(String username) throws EntityNotInDatabaseException;
 
-    @Transactional
-    @PreAuthorize("hasAuthority('PASSWORD_UPDATE')")
-    void updatePassword(PasswordInfoDto passwordInfoDto, String username) throws EntityNotInDatabaseException, ServiceException;
+  @Transactional
+  @PreAuthorize("hasAuthority('PASSWORD_UPDATE')")
+  void updatePassword(PasswordUpdateDto passwordUpdateDto, String username)
+      throws EntityNotInDatabaseException, ServiceException;
 
     void mergeUser(User user);
 }

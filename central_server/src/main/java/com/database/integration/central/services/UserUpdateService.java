@@ -1,6 +1,6 @@
 package com.database.integration.central.services;
 
-import com.database.integration.core.dto.AccountDto;
+import com.database.integration.core.dto.UserUpdateDto;
 import com.database.integration.core.exception.DatabaseErrorException;
 import com.database.integration.core.exception.EntityNotInDatabaseException;
 import com.database.integration.core.exception.EntityOptimisticLockException;
@@ -11,15 +11,16 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 
 
-public interface AccountUpdateService {
+public interface UserUpdateService {
 
-    @Transactional
-    @PreAuthorize("hasAuthority('ACCOUNT_UPDATE_ADMIN')")
-    void updateAccountByAdmin(AccountDto accountDto, List<String> roles) throws EntityNotInDatabaseException, EntityOptimisticLockException, DatabaseErrorException;
+  @Transactional
+  @PreAuthorize("hasAuthority('ACCOUNT_UPDATE_ADMIN')")
+  void updateAccountByAdmin(UserUpdateDto userUpdateDto, List<String> roles)
+      throws EntityNotInDatabaseException, EntityOptimisticLockException, DatabaseErrorException;
 
-    @Transactional
-    @PreAuthorize("hasAuthority('ACCOUNT_UPDATE_SELF')")
-    void updateAccountByUser(AccountDto accountDto) throws SystemBaseException;
+  @Transactional
+  @PreAuthorize("hasAuthority('ACCOUNT_UPDATE_SELF')")
+  void updateAccountByUser(UserUpdateDto userUpdateDto) throws SystemBaseException;
 
-    void mergeUserdata(Userdata userdata);
+  void mergeUserdata(Userdata userdata);
 }

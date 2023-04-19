@@ -1,11 +1,12 @@
 package com.database.integration.external.controllers;
 
 
-import com.database.integration.core.dto.PasswordInfoDto;
+import com.database.integration.core.dto.PasswordUpdateDto;
 import com.database.integration.core.exception.base.SystemBaseException;
 import com.database.integration.core.model.User;
 import com.database.integration.core.model.UserRole;
 import com.database.integration.external.services.UserService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,9 +14,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin(maxAge = 3600)
@@ -29,7 +35,7 @@ public class UserController {
     @RequestMapping(value = "/password", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
-    PasswordInfoDto getPassword() throws SystemBaseException {
+    PasswordUpdateDto getPassword() throws SystemBaseException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return userService.getPassword(auth.getName());
     }
@@ -37,21 +43,24 @@ public class UserController {
     @RequestMapping(value = "/password/{username}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
-    PasswordInfoDto getPasswordForAdmin(@PathVariable String username) throws SystemBaseException {
+    PasswordUpdateDto getPasswordForAdmin(@PathVariable String username)
+        throws SystemBaseException {
         return userService.getPasswordForAdmin(username);
     }
 
     @RequestMapping(value = "/password", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    public void updatePassword(@RequestBody PasswordInfoDto passwordInfoDto) throws SystemBaseException {
+    public void updatePassword(@RequestBody PasswordUpdateDto passwordUpdateDto)
+        throws SystemBaseException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        userService.updatePassword(passwordInfoDto, auth.getName());
+        userService.updatePassword(passwordUpdateDto, auth.getName());
     }
 
     @RequestMapping(value = "/password/admin", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    public void updatePasswordAdmin(@RequestBody PasswordInfoDto passwordInfoDto) throws SystemBaseException {
-        userService.updatePasswordForAdmin(passwordInfoDto);
+    public void updatePasswordAdmin(@RequestBody PasswordUpdateDto passwordUpdateDto)
+        throws SystemBaseException {
+        userService.updatePasswordForAdmin(passwordUpdateDto);
     }
 
     @RequestMapping(value = "/{username}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

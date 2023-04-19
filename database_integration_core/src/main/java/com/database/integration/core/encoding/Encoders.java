@@ -1,4 +1,4 @@
-package com.database.integration.core.encryption;
+package com.database.integration.core.encoding;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

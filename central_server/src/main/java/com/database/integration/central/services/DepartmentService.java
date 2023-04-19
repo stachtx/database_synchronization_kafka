@@ -4,11 +4,12 @@ import com.database.integration.core.dto.DepartmentDto;
 import com.database.integration.core.exception.DatabaseErrorException;
 import com.database.integration.core.exception.EntityNotInDatabaseException;
 import com.database.integration.core.model.Department;
-import java.util.List;
-import java.util.UUID;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
 
 public interface DepartmentService {
 
@@ -22,11 +23,11 @@ public interface DepartmentService {
 
     @Transactional
     @PreAuthorize("hasAuthority('DEPARTMENT_CREATE')")
-    void createDepartment(DepartmentDto departmentDto) throws DatabaseErrorException;
+    Department createDepartment(DepartmentDto departmentDto) throws DatabaseErrorException;
 
     @Transactional
     @PreAuthorize("hasAuthority('DEPARTMENT_UPDATE')")
-    void updateDepartment(DepartmentDto departmentDto) throws EntityNotInDatabaseException, DatabaseErrorException;
+    Department updateDepartment(DepartmentDto departmentDto) throws EntityNotInDatabaseException, DatabaseErrorException;
 
     @Transactional
     @PreAuthorize("hasAuthority('DEPARTMENT_DELETE')")
