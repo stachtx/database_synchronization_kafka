@@ -13,14 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface UserUpdateService {
 
-    @Transactional
-    @PreAuthorize("hasAuthority('ACCOUNT_UPDATE_ADMIN')")
-    void updateAccountByAdmin(UserUpdateDto userUpdateDto, List<String> roles)
-        throws EntityNotInDatabaseException, EntityOptimisticLockException, DatabaseErrorException;
+  @Transactional
+  @PreAuthorize("hasAuthority('ACCOUNT_UPDATE_ADMIN')")
+  void updateAccountByAdmin(UserUpdateDto userUpdateDto, List<String> roles)
+      throws EntityNotInDatabaseException, EntityOptimisticLockException, DatabaseErrorException;
 
-    @Transactional
-    @PreAuthorize("hasAuthority('ACCOUNT_UPDATE_SELF')")
-    void updateAccountByUser(UserUpdateDto userUpdateDto) throws SystemBaseException;
+  @Transactional
+  @PreAuthorize("hasAuthority('ACCOUNT_UPDATE_SELF')")
+  void updateAccountByUser(UserUpdateDto userUpdateDto) throws SystemBaseException;
 
-    void mergeUserdata(Userdata userdata);
+  void mergeUserdata(Userdata userdata);
 }

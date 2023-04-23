@@ -33,89 +33,88 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserUpdateServiceImpl implements UserUpdateService {
 
-    @Qualifier("userPasswordEncoder")
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+  @Qualifier("userPasswordEncoder")
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private UserRepository userRepository;
+  @Autowired
+  private UserRepository userRepository;
 
-    @Autowired
-    private UserRoleRepository userRoleRepository;
+  @Autowired
+  private UserRoleRepository userRoleRepository;
 
-    @Autowired
-    private UserdataRepository userdataRepository;
+  @Autowired
+  private UserdataRepository userdataRepository;
 
-    @Autowired
-    private KafkaProducer kafkaProducer;
+  @Autowired
+  private KafkaProducer kafkaProducer;
 
-    @Override
-    public void mergeUserdata(Userdata userdata) {
-        userdataRepository.merge(userdata);
+  @Override
+  public void mergeUserdata(Userdata userdata) {
+    userdataRepository.merge(userdata);
+  }
+
+  @Override
+  @Transactional
+  @PreAuthorize("hasAuthority('ACCOUNT_UPDATE_ADMIN')")
+  public void updateAccountByAdmin(UserUpdateDto userUpdateDto, List<String> roles)
+      throws EntityNotInDatabaseException, EntityOptimisticLockException, DatabaseErrorException {
+
+    var user = userRepository.findById(userUpdateDto.getId()).orElseThrow(
+        (() -> new EntityNotInDatabaseException(NO_OBJECT)));
+    validation(userUpdateDto, user);
+    userRepository.detach(user);
+    try {
+      var userRoles = getUserRoles(roles);
+
+      var mappedUser = toUser(userUpdateDto, user);
+      mappedUser.setUserRoles(userRoles);
+      var updateUser = userRepository.saveAndFlush(mappedUser);
+      kafkaProducer.send(updateUser);
+    } catch (ObjectOptimisticLockingFailureException e) {
+      throw new EntityOptimisticLockException(OPTIMISTIC_LOCK);
     }
 
-    @Override
-    @Transactional
-    @PreAuthorize("hasAuthority('ACCOUNT_UPDATE_ADMIN')")
-    public void updateAccountByAdmin(UserUpdateDto userUpdateDto, List<String> roles)
-        throws EntityNotInDatabaseException, EntityOptimisticLockException, DatabaseErrorException {
+  }
 
-        var user = userRepository.findById(userUpdateDto.getId()).orElseThrow(
-            (() -> new EntityNotInDatabaseException(NO_OBJECT)));
-        validation(userUpdateDto, user);
-        userRepository.detach(user);
-        try {
-            var userRoles = getUserRoles(roles);
-
-            var mappedUser = toUser(userUpdateDto, user);
-            mappedUser.setUserRoles(userRoles);
-            var updateUser = userRepository.saveAndFlush(mappedUser);
-            kafkaProducer.send(updateUser);
-        } catch (ObjectOptimisticLockingFailureException e) {
-            throw new EntityOptimisticLockException(OPTIMISTIC_LOCK);
-        }
-
+  private Set<UserRole> getUserRoles(List<String> roles) {
+    if (roles != null && !roles.isEmpty()) {
+      return userRoleRepository.findAll().stream()
+          .filter(role -> roles.stream().anyMatch(name -> name.equals(role.getName()))).collect(
+              Collectors.toSet());
     }
+    return Collections.emptySet();
+  }
 
-    private Set<UserRole> getUserRoles(List<String> roles) {
-        if (roles != null && !roles.isEmpty()) {
-            return userRoleRepository.findAll().stream()
-                .filter(role -> roles.stream().anyMatch(name -> name.equals(role.getName())))
-                .collect(
-                    Collectors.toSet());
-        }
-        return Collections.emptySet();
+  @Override
+  @Transactional
+  @PreAuthorize("hasAuthority('ACCOUNT_UPDATE_SELF')")
+  public void updateAccountByUser(UserUpdateDto userUpdateDto)
+      throws EntityNotInDatabaseException, EntityOptimisticLockException, DatabaseErrorException {
+    var user = userRepository.findById(userUpdateDto.getId()).orElseThrow(
+        (() -> new EntityNotInDatabaseException(NO_OBJECT)));
+    validation(userUpdateDto, user);
+    userRepository.detach(user);
+    try {
+      var updatedUser = userRepository.saveAndFlush(toUser(userUpdateDto, user));
+      kafkaProducer.send(updatedUser);
+    } catch (ObjectOptimisticLockingFailureException e) {
+      throw new EntityOptimisticLockException(OPTIMISTIC_LOCK);
     }
+  }
 
-    @Override
-    @Transactional
-    @PreAuthorize("hasAuthority('ACCOUNT_UPDATE_SELF')")
-    public void updateAccountByUser(UserUpdateDto userUpdateDto)
-        throws EntityNotInDatabaseException, EntityOptimisticLockException, DatabaseErrorException {
-        var user = userRepository.findById(userUpdateDto.getId()).orElseThrow(
-            (() -> new EntityNotInDatabaseException(NO_OBJECT)));
-        validation(userUpdateDto, user);
-        userRepository.detach(user);
-        try {
-            var updatedUser = userRepository.saveAndFlush(toUser(userUpdateDto, user));
-            kafkaProducer.send(updatedUser);
-        } catch (ObjectOptimisticLockingFailureException e) {
-            throw new EntityOptimisticLockException(OPTIMISTIC_LOCK);
-        }
+  private void validation(UserUpdateDto userUpdateDto, User user)
+      throws DatabaseErrorException {
+    if (userdataRepository.findByEmail(userUpdateDto.getEmail()).isPresent() && !user.getUserdata()
+        .getEmail()
+        .equals(userUpdateDto.getEmail())) {
+      throw new DatabaseErrorException(EMAIL_TAKEN);
     }
+    if (userRepository.findByUsername(userUpdateDto.getUsername()).isPresent()
+        && !user.getUsername().equals(
+        userUpdateDto.getUsername())) {
+      throw new DatabaseErrorException(USERNAME_TAKEN);
+    }
+  }
 
-    private void validation(UserUpdateDto userUpdateDto, User user)
-        throws DatabaseErrorException {
-        if (userdataRepository.findByEmail(userUpdateDto.getEmail()).isPresent()
-            && !user.getUserdata()
-            .getEmail()
-            .equals(userUpdateDto.getEmail())) {
-            throw new DatabaseErrorException(EMAIL_TAKEN);
-        }
-        if (userRepository.findByUsername(userUpdateDto.getUsername()).isPresent()
-            && !user.getUsername().equals(
-            userUpdateDto.getUsername())) {
-            throw new DatabaseErrorException(USERNAME_TAKEN);
-        }
-    }
 }

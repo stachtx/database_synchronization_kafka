@@ -34,5 +34,4 @@ public interface DepartmentService {
   void deleteDepartmentById(UUID id) throws EntityNotInDatabaseException;
 
   void mergeDepartment(Department department);
-
 }

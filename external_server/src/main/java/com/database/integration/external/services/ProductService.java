@@ -23,12 +23,12 @@ public interface ProductService {
 
   @Transactional(propagation = Propagation.MANDATORY)
   @PreAuthorize("hasAuthority('PRODUCT_CREATE')")
-  void createNewProduct(ProductDto productDto)
+  Product createProduct(ProductDto productDto)
       throws DatabaseErrorException, EntityNotInDatabaseException;
 
   @Transactional(propagation = Propagation.MANDATORY)
   @PreAuthorize("hasAuthority('PRODUCT_UPDATE')")
-  void updateProduct(ProductDto product)
+  Product updateProduct(ProductDto product)
       throws EntityNotInDatabaseException, EntityOptimisticLockException, DatabaseErrorException;
 
   @Transactional(propagation = Propagation.MANDATORY)

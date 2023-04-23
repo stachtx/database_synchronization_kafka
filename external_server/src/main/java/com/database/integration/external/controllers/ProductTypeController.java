@@ -9,15 +9,16 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,39 +29,38 @@ import org.springframework.web.bind.annotation.RestController;
 @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = SystemBaseException.class)
 public class ProductTypeController {
 
-    @Autowired
-    private ProductTypeServiceImpl productTypeService;
+  @Autowired
+  private ProductTypeServiceImpl productTypeService;
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody
-    ProductType get(@PathVariable UUID id) throws SystemBaseException {
-        return productTypeService.getProductTypeById(id);
-    }
+  @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(value = HttpStatus.OK)
+  public @ResponseBody
+  ProductType get(@PathVariable UUID id) throws SystemBaseException {
+    return productTypeService.getProductTypeById(id);
+  }
 
-    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody
-    List<ProductType> getAll() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return productTypeService.getAllProductTypes();
-    }
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(value = HttpStatus.OK)
+  public @ResponseBody
+  List<ProductType> getAll() {
+    return productTypeService.getAllProductTypes();
+  }
 
-    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
-    public void create(@RequestBody ProductTypeDto productTypeDto) throws SystemBaseException {
-        productTypeService.createProductType(productTypeDto);
-    }
+  @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(value = HttpStatus.OK)
+  public void create(@RequestBody ProductTypeDto productTypeDto) throws SystemBaseException {
+    productTypeService.createProductType(productTypeDto);
+  }
 
-    @RequestMapping(method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
-    public void update(@RequestBody ProductTypeDto productTypeDto) throws SystemBaseException {
-        productTypeService.updateProductType(productTypeDto);
-    }
+  @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(value = HttpStatus.OK)
+  public void update(@RequestBody ProductTypeDto productTypeDto) throws SystemBaseException {
+    productTypeService.updateProductType(productTypeDto);
+  }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
-    public void delete(@PathVariable UUID id) throws SystemBaseException {
-        productTypeService.deleteProductTypeById(id);
-    }
+  @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(value = HttpStatus.OK)
+  public void delete(@PathVariable UUID id) throws SystemBaseException {
+    productTypeService.deleteProductTypeById(id);
+  }
 }

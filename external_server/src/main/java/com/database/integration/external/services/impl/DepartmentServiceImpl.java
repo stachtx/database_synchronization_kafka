@@ -14,7 +14,6 @@ import com.database.integration.external.services.DepartmentService;
 import jakarta.persistence.PersistenceException;
 import java.util.List;
 import java.util.UUID;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@RequiredArgsConstructor
 public class DepartmentServiceImpl implements DepartmentService {
 
     @Autowired
@@ -53,8 +51,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     @PreAuthorize("hasAuthority('DEPARTMENT_CREATE')")
     public Department createDepartment(DepartmentDto departmentDto) throws DatabaseErrorException {
         try {
-            Department savedDepartment = departmentRepository.saveAndFlush(
-                toDepartment(departmentDto));
+          Department savedDepartment = departmentRepository.saveAndFlush(
+              toDepartment(departmentDto));
             kafkaProducer.send(savedDepartment);
             return savedDepartment;
         } catch (PersistenceException e) {
@@ -62,31 +60,31 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
     }
 
-    @Override
-    @Transactional
-    @PreAuthorize("hasAuthority('DEPARTMENT_UPDATE')")
-    public Department updateDepartment(DepartmentDto departmentDto)
-        throws EntityNotInDatabaseException, DatabaseErrorException {
-        try {
-            Department oldDepartment = departmentRepository.findById(departmentDto.getId())
-                .orElseThrow(() ->
-                    new EntityNotInDatabaseException(NO_OBJECT));
-            departmentRepository.detach(oldDepartment);
-            Department department = departmentRepository.saveAndFlush(
-                toDepartment(departmentDto, oldDepartment));
-            kafkaProducer.send(department);
-            return department;
-        } catch (PersistenceException e) {
-            throw new DatabaseErrorException(DEPARTMENT_NAME_TAKEN);
-        }
+  @Override
+  @Transactional
+  @PreAuthorize("hasAuthority('DEPARTMENT_UPDATE')")
+  public Department updateDepartment(DepartmentDto departmentDto)
+      throws EntityNotInDatabaseException, DatabaseErrorException {
+    try {
+      Department oldDepartment = departmentRepository.findById(departmentDto.getId())
+          .orElseThrow(() ->
+              new EntityNotInDatabaseException(NO_OBJECT));
+      departmentRepository.detach(oldDepartment);
+      Department department = departmentRepository.saveAndFlush(
+          toDepartment(departmentDto, oldDepartment));
+      kafkaProducer.send(department);
+      return department;
+    } catch (PersistenceException e) {
+      throw new DatabaseErrorException(DEPARTMENT_NAME_TAKEN);
+    }
     }
 
     @Override
     @Transactional
     @PreAuthorize("hasAuthority('DEPARTMENT_DELETE')")
     public void deleteDepartmentById(UUID id) throws EntityNotInDatabaseException {
-        Department department = departmentRepository.findById(id).orElseThrow(() ->
-            new EntityNotInDatabaseException(NO_OBJECT));
+      Department department = departmentRepository.findById(id).orElseThrow(() ->
+          new EntityNotInDatabaseException(NO_OBJECT));
         department.setDeleted(true);
         kafkaProducer.send(department);
     }
@@ -95,5 +93,4 @@ public class DepartmentServiceImpl implements DepartmentService {
     public void mergeDepartment(Department department) {
         departmentRepository.merge(department);
     }
-
 }

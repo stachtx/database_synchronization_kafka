@@ -1,5 +1,6 @@
-package com.database.integration.central.controllers;
+package external.controllers;
 
+import com.database.integration.external.controllers.DepartmentController;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -11,8 +12,8 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest(DepartmentController.class)
 public class DepartmentControllerTest {
 
-    @Autowired
-    MockMvc mockMvc;
+  @Autowired
+  MockMvc mockMvc;
 
 //    @Test
 //    public void shouldGetDepartment() throws Exception {

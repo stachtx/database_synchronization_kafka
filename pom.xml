@@ -15,6 +15,7 @@
     </properties>
 
     <modules>
+        <module>database_integration_core</module>
         <module>central_server</module>
         <module>external_server</module>
     </modules>

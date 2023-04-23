@@ -99,5 +99,4 @@ public class ProductTypeServiceImpl implements ProductTypeService {
   public void mergeProductType(ProductType productType) {
     productTypeRepository.merge(productType);
   }
-
 }

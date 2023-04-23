@@ -18,32 +18,31 @@ public interface UserService {
     @PreAuthorize("hasAuthority('USER_READ')")
     User getUser(String username) throws EntityNotInDatabaseException;
 
-    @Transactional
-    @PreAuthorize("hasAuthority('USER_ROLES_READ')")
-    List<UserRole> getUserRoles(String username) throws EntityNotInDatabaseException;
+  @Transactional
+  @PreAuthorize("hasAuthority('USER_ROLES_READ')")
+  List<UserRole> getUserRoles(String username) throws EntityNotInDatabaseException;
 
-    @Transactional
-    @PreAuthorize("hasAuthority('USER_DELETE')")
-    void deleteUser(String username) throws EntityNotInDatabaseException;
+  @Transactional
+  @PreAuthorize("hasAuthority('USER_DELETE')")
+  void deleteUser(String username) throws EntityNotInDatabaseException;
 
-    @Transactional
-    @PreAuthorize("hasAuthority('PASSWORD_ADMIN_READ')")
-    PasswordUpdateDto getPasswordForAdmin(String username) throws EntityNotInDatabaseException;
+  @Transactional
+  @PreAuthorize("hasAuthority('PASSWORD_ADMIN_READ')")
+  PasswordUpdateDto getPasswordForAdmin(String username) throws EntityNotInDatabaseException;
 
-    @Transactional
-    @PreAuthorize("hasAuthority('PASSWORD_ADMIN_UPDATE')")
-    void updatePasswordForAdmin(PasswordUpdateDto passwordInfoForAdmin)
-        throws EntityNotInDatabaseException, EntityOptimisticLockException;
+  @Transactional
+  @PreAuthorize("hasAuthority('PASSWORD_ADMIN_UPDATE')")
+  void updatePasswordForAdmin(PasswordUpdateDto passwordInfoForAdmin)
+      throws EntityNotInDatabaseException, EntityOptimisticLockException;
 
-    @Transactional
-    @PreAuthorize("hasAuthority('PASSWORD_READ')")
-    PasswordUpdateDto getPassword(String username) throws EntityNotInDatabaseException;
+  @Transactional
+  @PreAuthorize("hasAuthority('PASSWORD_READ')")
+  PasswordUpdateDto getPassword(String username) throws EntityNotInDatabaseException;
 
-    @Transactional
-    @PreAuthorize("hasAuthority('PASSWORD_UPDATE')")
-    void updatePassword(PasswordUpdateDto passwordUpdateDto, String username)
-        throws EntityNotInDatabaseException, ServiceException;
+  @Transactional
+  @PreAuthorize("hasAuthority('PASSWORD_UPDATE')")
+  void updatePassword(PasswordUpdateDto passwordUpdateDto, String username)
+      throws EntityNotInDatabaseException, ServiceException;
 
-    @Transactional
-    void mergeUser(User user);
+  void mergeUser(User user);
 }

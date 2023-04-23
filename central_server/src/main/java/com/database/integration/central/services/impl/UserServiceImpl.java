@@ -26,50 +26,53 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    UserRepository userRepository;
+  @Autowired
+  UserRepository userRepository;
 
-    @Autowired
-    KafkaProducer kafkaProducer;
+  @Autowired
+  KafkaProducer kafkaProducer;
 
-    @Qualifier("userPasswordEncoder")
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+  @Qualifier("userPasswordEncoder")
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
-    @Override
-    public List<User> getAllUsers() {
-        List<User> users = userRepository.findAll();
-      return users.stream().filter(User::isEnabled).toList();
-    }
+  @Override
+  public List<User> getAllUsers() {
+    List<User> users = userRepository.findAll();
+    return users.stream().filter(User::isEnabled).toList();
+  }
 
-    @Override
-    @Transactional
-    @PreAuthorize("hasAuthority('USER_READ')")
-    public User getUser(String username) throws EntityNotInDatabaseException {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotInDatabaseException(NO_OBJECT));
-        Hibernate.initialize(user.getUsername());
-        Hibernate.initialize(user.getUserRoles());
-        Hibernate.initialize(user.getAuthorities());
-        Hibernate.initialize(user.getUserdata());
-        return user.isEnabled() ? user : null;
-    }
+  @Override
+  @Transactional
+  @PreAuthorize("hasAuthority('USER_READ')")
+  public User getUser(String username) throws EntityNotInDatabaseException {
+    User user = userRepository.findByUsername(username)
+        .orElseThrow(() -> new EntityNotInDatabaseException(NO_OBJECT));
+    Hibernate.initialize(user.getUsername());
+    Hibernate.initialize(user.getUserRoles());
+    Hibernate.initialize(user.getAuthorities());
+    Hibernate.initialize(user.getUserdata());
+    return user.isEnabled() ? user : null;
+  }
 
-    @Override
-    @Transactional
-    @PreAuthorize("hasAuthority('USER_ROLES_READ')")
-    public List<UserRole> getUserRoles(String username) throws EntityNotInDatabaseException {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotInDatabaseException(NO_OBJECT));
-        return new ArrayList<>(user.getUserRoles());
-    }
+  @Override
+  @Transactional
+  @PreAuthorize("hasAuthority('USER_ROLES_READ')")
+  public List<UserRole> getUserRoles(String username) throws EntityNotInDatabaseException {
+    User user = userRepository.findByUsername(username)
+        .orElseThrow(() -> new EntityNotInDatabaseException(NO_OBJECT));
+    return new ArrayList<>(user.getUserRoles());
+  }
 
-    @Override
-    @Transactional
-    @PreAuthorize("hasAuthority('USER_DELETE')")
-    public void deleteUser(String username) throws EntityNotInDatabaseException {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotInDatabaseException(NO_OBJECT));
-        user.setEnabled(false);
-        kafkaProducer.send(user);
-    }
+  @Override
+  @Transactional
+  @PreAuthorize("hasAuthority('USER_DELETE')")
+  public void deleteUser(String username) throws EntityNotInDatabaseException {
+    User user = userRepository.findByUsername(username)
+        .orElseThrow(() -> new EntityNotInDatabaseException(NO_OBJECT));
+    user.setEnabled(false);
+    kafkaProducer.send(user);
+  }
 
   @Override
   @Transactional
@@ -97,7 +100,7 @@ public class UserServiceImpl implements UserService {
     } catch (StaleObjectStateException e) {
       throw new EntityOptimisticLockException(OPTIMISTIC_LOCK);
     }
-    }
+  }
 
   @Override
   @Transactional
@@ -134,8 +137,8 @@ public class UserServiceImpl implements UserService {
 
   }
 
-    @Override
-    public void mergeUser(User user) {
-        userRepository.merge(user);
-    }
+  @Override
+  public void mergeUser(User user) {
+    userRepository.merge(user);
+  }
 }

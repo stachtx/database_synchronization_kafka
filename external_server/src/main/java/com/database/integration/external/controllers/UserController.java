@@ -15,10 +15,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,60 +34,60 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/password", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
+  @GetMapping(value = "/password", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
     PasswordUpdateDto getPassword() throws SystemBaseException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return userService.getPassword(auth.getName());
     }
 
-    @RequestMapping(value = "/password/{username}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
+  @GetMapping(value = "/password/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
     PasswordUpdateDto getPasswordForAdmin(@PathVariable String username)
         throws SystemBaseException {
         return userService.getPasswordForAdmin(username);
     }
 
-    @RequestMapping(value = "/password", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
+  @PutMapping(value = "/password", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(value = HttpStatus.OK)
     public void updatePassword(@RequestBody PasswordUpdateDto passwordUpdateDto)
         throws SystemBaseException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         userService.updatePassword(passwordUpdateDto, auth.getName());
     }
 
-    @RequestMapping(value = "/password/admin", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
+  @PutMapping(value = "/password/admin", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(value = HttpStatus.OK)
     public void updatePasswordAdmin(@RequestBody PasswordUpdateDto passwordUpdateDto)
         throws SystemBaseException {
         userService.updatePasswordForAdmin(passwordUpdateDto);
     }
 
-    @RequestMapping(value = "/{username}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
+  @GetMapping(value = "/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
     User getUserEdit(@PathVariable String username) throws SystemBaseException {
         return userService.getUser(username);
     }
 
-    @RequestMapping(value = "/user/roles/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
+  @GetMapping(value = "/user/roles/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
     List<UserRole> getUserRoles(@PathVariable String username) throws SystemBaseException {
         return userService.getUserRoles(username);
     }
 
-    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
     List<User> getAll() {
         return userService.getAllUsers();
     }
 
-    @RequestMapping(value = "/{username}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
+  @DeleteMapping(value = "/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(value = HttpStatus.OK)
     public void delete(@PathVariable String username) throws SystemBaseException {
         userService.deleteUser(username);
     }

@@ -1,4 +1,4 @@
-package com.database.integration.central.services.impl;
+package external.services.impl;
 
 
 import static com.database.integration.core.exception.DatabaseErrorException.ErrorMessage.SERIAL_NUMBER_NAME_TAKEN;
@@ -9,10 +9,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.database.integration.central.kafka.producer.KafkaProducer;
-import com.database.integration.central.repositories.DepartmentRepository;
-import com.database.integration.central.repositories.ProductRepository;
-import com.database.integration.central.repositories.ProductTypeRepository;
 import com.database.integration.core.dto.ProductDto;
 import com.database.integration.core.exception.DatabaseErrorException;
 import com.database.integration.core.exception.EntityNotInDatabaseException;
@@ -21,6 +17,11 @@ import com.database.integration.core.model.Department;
 import com.database.integration.core.model.Product;
 import com.database.integration.core.model.ProductStatus;
 import com.database.integration.core.model.ProductType;
+import com.database.integration.external.kafka.producer.KafkaProducer;
+import com.database.integration.external.repositories.DepartmentRepository;
+import com.database.integration.external.repositories.ProductRepository;
+import com.database.integration.external.repositories.ProductTypeRepository;
+import com.database.integration.external.services.impl.ProductServiceImpl;
 import jakarta.persistence.PersistenceException;
 import java.util.Calendar;
 import java.util.Optional;
@@ -84,7 +85,7 @@ class ProductServiceImplTest {
   }
 
   @Test
-  public void shouldReturnProductByUUID() throws EntityNotInDatabaseException {
+  void shouldReturnProductByUUID() throws EntityNotInDatabaseException {
     //given
     when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
     //when
@@ -94,7 +95,7 @@ class ProductServiceImplTest {
   }
 
   @Test
-  public void shouldThrowExceptionWhenProductIsNotInDatabase() {
+  void shouldThrowExceptionWhenProductIsNotInDatabase() {
     //given
     when(productRepository.findById(product.getId()))
         .thenReturn(Optional.empty());
@@ -104,7 +105,7 @@ class ProductServiceImplTest {
   }
 
   @Test
-  public void shouldCreateProductAndSendToKafkaTopic()
+  void shouldCreateProductAndSendToKafkaTopic()
       throws DatabaseErrorException, EntityNotInDatabaseException {
     //give
     when(productTypeRepository.findById(productDto.getProductTypeId())).thenReturn(

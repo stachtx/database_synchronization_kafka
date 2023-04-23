@@ -9,9 +9,9 @@ import com.database.integration.core.model.Userdata;
 import java.util.Calendar;
 import java.util.Set;
 
-public class UserMapper {
+public interface UserMapper {
 
-  public static User toUser(UserRegistrationDto data, String password, Set<UserRole> roles) {
+  static User toUser(UserRegistrationDto data, String password, Set<UserRole> roles) {
     return User.builder()
         .username(data.getUsername())
         .password(password)
@@ -42,7 +42,7 @@ public class UserMapper {
   }
 
 
-  public static User toUser(UserUpdateDto userUpdateDto, User user) {
+  static User toUser(UserUpdateDto userUpdateDto, User user) {
     user.setUsername(userUpdateDto.getUsername());
     user.setVersion(userUpdateDto.getVersionUser());
     user.setUserdata(toUserdata(userUpdateDto, user.getUserdata()));

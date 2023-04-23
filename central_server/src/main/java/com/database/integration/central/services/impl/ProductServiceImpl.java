@@ -73,7 +73,6 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new EntityNotInDatabaseException(NO_OBJECT));
             ProductType productType = productTypeRepository.findById(productDto.getProductTypeId())
                 .orElseThrow(() -> new EntityNotInDatabaseException(NO_OBJECT));
-            ;
             Product savedProduct = productRepository.saveAndFlush(
                 ProductMapper.toProduct(productDto, department, productType));
             kafkaProducer.send(savedProduct);
@@ -86,17 +85,17 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(propagation = Propagation.MANDATORY)
     @PreAuthorize("hasAuthority('PRODUCT_UPDATE')")
-    public Product updateProduct(ProductDto product)
+    public Product updateProduct(ProductDto productDto)
         throws EntityNotInDatabaseException, EntityOptimisticLockException, DatabaseErrorException {
         try {
-            Product oldProduct = productRepository.findById(product.getId())
+            Product oldProduct = productRepository.findById(productDto.getId())
                 .orElseThrow(() -> new EntityNotInDatabaseException(NO_OBJECT));
             productRepository.detach(oldProduct);
-            Department department = departmentRepository.getReferenceById(
-                product.getDepartmentId());
-            ProductType productType = productTypeRepository.getReferenceById(
-                product.getProductTypeId());
-            Product updatedProduct = ProductMapper.toProduct(product, oldProduct, department,
+            Department department = departmentRepository.findById(productDto.getDepartmentId())
+                .orElseThrow(() -> new EntityNotInDatabaseException(NO_OBJECT));
+            ProductType productType = productTypeRepository.findById(productDto.getProductTypeId())
+                .orElseThrow(() -> new EntityNotInDatabaseException(NO_OBJECT));
+            Product updatedProduct = ProductMapper.toProduct(productDto, oldProduct, department,
                 productType);
             productRepository.saveAndFlush(updatedProduct);
             kafkaProducer.send(updatedProduct);

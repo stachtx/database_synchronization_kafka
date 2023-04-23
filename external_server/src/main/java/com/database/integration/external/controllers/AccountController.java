@@ -13,9 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,24 +31,24 @@ public class AccountController {
     @Autowired
     private UserRegistrationService userRegistrationService;
 
-    @RequestMapping(value = "admin/edit", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
+  @PutMapping(value = "admin/edit", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(value = HttpStatus.OK)
     public ResponseEntity<?> saveAccountAfterEdit(@RequestBody UserUpdateDto data,
         @RequestBody List<String> roles) throws SystemBaseException {
         userUpdateService.updateAccountByAdmin(data, roles);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "admin/create", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
+  @PostMapping(value = "admin/create", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(value = HttpStatus.OK)
     public ResponseEntity<?> addUser(@RequestBody UserRegistrationDto data)
         throws SystemBaseException {
         userRegistrationService.registerNewUserAccount(data, true);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "self/edit", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
+  @PutMapping(value = "self/edit", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(value = HttpStatus.OK)
     public ResponseEntity<?> safeProfileAfterEdit(@RequestBody UserUpdateDto data)
         throws SystemBaseException {
         userUpdateService.updateAccountByUser(data);

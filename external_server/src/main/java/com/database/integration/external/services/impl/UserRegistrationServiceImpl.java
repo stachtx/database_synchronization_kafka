@@ -27,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserRegistrationServiceImpl implements UserRegistrationService {
 
-
   @Qualifier("userPasswordEncoder")
   @Autowired
   private PasswordEncoder passwordEncoder;
@@ -36,13 +35,13 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
   private UserRepository userRepository;
 
   @Autowired
-    private UserRoleRepository userRoleRepository;
+  private UserRoleRepository userRoleRepository;
 
-    @Autowired
-    private UserdataRepository userdataRepository;
+  @Autowired
+  private UserdataRepository userdataRepository;
 
-    @Autowired
-    private KafkaProducer kafkaProducer;
+  @Autowired
+  private KafkaProducer kafkaProducer;
 
   @Override
   @Transactional(isolation = Isolation.READ_COMMITTED)
